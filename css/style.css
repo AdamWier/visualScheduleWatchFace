@@ -1,0 +1,113 @@
+#result{
+	color: #FFF;
+}
+
+.text{
+	font-size: 50%;
+}
+
+#emoji{
+	font-size: 300%;
+	margin: -15% 0 -25% 0;
+	padding: -15% 0 -25% 0;
+}
+
+/*body {
+    width: 100%;
+    height: 100%;
+}
+/*
+#digital-body {
+    position: absolute;
+    width: 360px;
+    height: 360px;
+    top: 0px;
+    left: 0px;
+    background-color: #222;
+    overflow: hidden;
+}
+/*
+#battery-rec {
+    position: absolute;
+    width: 10%;
+    height: 5%;
+    top: 20%;
+    left: 63%;
+    border: solid 2px white;
+}
+
+#battery-fill {
+    position: absolute;
+    width: 11%;
+    height: 6%;
+    top: 20%;
+    left: 63%;
+    z-index: 10;
+    background-color: white;
+}
+
+/*
+hour&minutes
+*/
+
+/*#rec-time-container {
+	position: absolute;
+	left: 50%;
+    top: 25%;
+}
+
+#rec-time {
+	position: relative;
+    left: -50%;
+}
+
+#str-hours {
+    float: left;
+    color: white;
+}
+
+#str-console {
+    float: left;
+    color: white;
+}
+
+#str-minutes {
+    float: left;
+    color: white;
+}
+
+
+/*
+string day & month
+*/
+
+/* #rec-string-time {
+    position: absolute;
+    height: 30%;
+    top: 60%;
+    left: 24%;
+}
+
+#str-day {
+    font-size: 250%;
+    color: white;
+    float: left;
+}
+*/
+/*@media screen and (-tizen-geometric-shape: circle) {
+#str-hours {
+    font-size: 300%;
+}
+
+#str-console {
+    font-size: 300%;
+}
+
+#str-minutes {
+    font-size: 300%;
+}
+
+#rec-string-time {
+    left: 80px;
+}
+}*/
