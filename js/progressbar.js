@@ -1,8 +1,9 @@
+var progressBarWidget;
+
 (function() {
     var page = document.getElementById('pageCircleProgressBar'),
         progressBar = document.getElementById('circleprogress'),
         isCircle = tau.support.shape.circle,
-        progressBarWidget,
         resultText,
         i;
 
@@ -22,41 +23,14 @@
             document.removeEventListener('rotarydetent', rotaryDetentHandler);
         }
     }
-
-    function rotaryDetentHandler() {
-        /* Get the rotary direction */
-        var direction = event.detail.direction,
-            value = parseInt(progressBarWidget.value());
-
-        if (direction === 'CW') {
-            /* Right direction */
-            if (value < 100) {
-                value++;
-            } else {
-                value = 100;
-            }
-        } else if (direction === 'CCW') {
-            /* Left direction */
-            if (value > 0) {
-                value--;
-            } else {
-                value = 0;
-            }
-        }
-
-        progressBarWidget.value(value);
-        printResult();
-    }
-
+    
     function pageBeforeShowHandler() {
         if (isCircle) {
             /* Make the circular progressbar object */
             progressBarWidget = new tau.widget.CircleProgressBar(progressBar, {size: 'full', thickness: 30});
-            document.addEventListener('rotarydetent', rotaryDetentHandler);
        
         }
 
-        i = parseInt(progressBarWidget.value());
     }
 
     function pageHideHandler() {

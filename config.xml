@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <widget xmlns="http://www.w3.org/ns/widgets" xmlns:tizen="http://tizen.org/ns/widgets" id="http://yourdomain/DigitalWatch" version="1.0.0" viewmodes="maximized">
+    <access origin="*" subdomains="true"></access>
     <tizen:application id="lNiwprkUH8.DigitalWatch" package="lNiwprkUH8" required_version="4.0.0" ambient_support="enable"/>
     <tizen:category name="http://tizen.org/category/wearable_clock"/>
     <content src="index.html"/>
     <feature name="http://tizen.org/feature/screen.size.all"/>
-    <feature name="http://tizen.org/feature/calendar"/>
-    <feature name="http://tizen.org/feature/account"/>
     <icon src="icon.png"/>
     <name>DigitalWatch</name>
-    <tizen:privilege name="http://tizen.org/privilege/system"/>
-    <tizen:privilege name="http://tizen.org/privilege/calendar.read"/>
-    <tizen:privilege name="http://tizen.org/privilege/calendar.write"/>
-    <tizen:privilege name="http://tizen.org/privilege/alarm"/>
-    <tizen:privilege name="http://tizen.org/privilege/account.read"/>
-    <tizen:privilege name="http://tizen.org/privilege/account.write"/>
+    <tizen:privilege name="http://tizen.org/privilege/internet"/>
     <tizen:profile name="wearable"/>
     <tizen:setting background-support="disable" encryption="disable" hwkey-event="enable"/>
 </widget>

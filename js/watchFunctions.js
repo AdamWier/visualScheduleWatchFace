@@ -112,6 +112,12 @@
             strConsole.style.visibility = "visible";
             flagConsole = false;
         }
+        
+        if (!(state.endDateTime.getTime() > new Date().getTime())){
+        	getCalendar();
+        } else {
+        	calculateProgress();
+        }
     }
 
     /**

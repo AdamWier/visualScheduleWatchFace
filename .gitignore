@@ -1,3 +1,4 @@
 *.wgt
 .sign/*
 .settings/*
+env.js
