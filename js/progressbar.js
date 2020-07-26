@@ -51,7 +51,7 @@
     function pageBeforeShowHandler() {
         if (isCircle) {
             /* Make the circular progressbar object */
-            progressBarWidget = new tau.widget.CircleProgressBar(progressBar, {size: 'full'});
+            progressBarWidget = new tau.widget.CircleProgressBar(progressBar, {size: 'full', thickness: 30});
             document.addEventListener('rotarydetent', rotaryDetentHandler);
        
         }

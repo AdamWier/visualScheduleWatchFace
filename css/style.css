@@ -2,14 +2,21 @@
 	color: #FFF;
 }
 
-.text{
-	font-size: 50%;
+.big-text{
+	font-size: 100%;
 }
 
 #emoji{
 	font-size: 300%;
-	margin: -15% 0 -25% 0;
-	padding: -15% 0 -25% 0;
+	margin: -5% 0 -5% 0;
+}
+
+#rec-time{
+	/*margin-top: -20%*/
+}
+
+.small-text{
+	font-size: 50%
 }
 
 /*body {
