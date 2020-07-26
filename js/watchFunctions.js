@@ -115,8 +115,7 @@
     }
 
     /**
-     * Sets to background image as BACKGROUND_URL,
-     * and starts timer for normal digital watch mode.
+     * Starts timer for normal digital watch mode.
      * @private
      */
     function initDigitalWatch() {
@@ -124,78 +123,12 @@
         interval = setInterval(updateTime, 500);
     }
 
-    /**
-     * Clears timer and sets background image as none for ambient digital watch mode.
-     * @private
-     */
-   /* function ambientDigitalWatch() {
-        flagDigital = false;
-        clearInterval(interval);
-        document.getElementById("digital-body").style.backgroundImage = "none";
-        updateTime();
-    }
-
-    /**
-     * Gets battery state.
-     * Updates battery level.
-     * @private
-     */
-   /* function getBatteryState() {
-        var batteryLevel = Math.floor(battery.level * 10),
-            batteryFill = document.getElementById("battery-fill");
-
-        batteryLevel = batteryLevel + 1;
-        batteryFill.style.width = batteryLevel + "%";
-    }
-
-    /**
-     * Updates watch screen. (time and date)
-     * @private
-     */
-    /*function updateWatch() {
-        updateTime();
-        updateDate(0);
-    }
-
-    /**
-     * Binds events.
-     * @private
-     */
+    
     function bindEvents() {
-        // add eventListener for battery state
-        /*battery.addEventListener("chargingchange", getBatteryState);
-        battery.addEventListener("chargingtimechange", getBatteryState);
-        battery.addEventListener("dischargingtimechange", getBatteryState);
-        battery.addEventListener("levelchange", getBatteryState);*/
-
         // add eventListener for timetick
         window.addEventListener("timetick", function() {
             ambientDigitalWatch();
         });
-
-        // add eventListener for ambientmodechanged
-       /* window.addEventListener("ambientmodechanged", function(e) {
-            if (e.detail.ambientMode === true) {
-                // rendering ambient mode case
-                ambientDigitalWatch();
-
-            } else {
-                // rendering normal digital mode case
-                initDigitalWatch();
-            }
-        });
-
-        // add eventListener to update the screen immediately when the device wakes up.
-        document.addEventListener("visibilitychange", function() {
-            if (!document.hidden) {
-                updateWatch();
-            }
-        });
-
-        // add event listeners to update watch screen when the time zone is changed.
-        tizen.time.setTimezoneChangeListener(function() {
-            updateWatch();
-        });*/
     }
 
     /**
