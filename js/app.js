@@ -9,14 +9,15 @@ function getCalendar() {
 
     xmlHttp.overrideMimeType("application/json");
     var now = (new Date()).toISOString();
-    xmlHttp.open("GET", "https://www.googleapis.com/calendar/v3/calendars/"+CALENDAR+"/events?timeMin="+now+"&orderBy=startTime&singleEvents=true&maxResults=1&key="+API_KEY, false);
+    xmlHttp.open("GET", "https://www.googleapis.com/calendar/v3/calendars/"+CALENDAR+"/events?timeMin="+now+"&orderBy=startTime&singleEvents=true&maxResults=10&key="+API_KEY, false);
     
     xmlHttp.onreadystatechange = function() {
         // Checks responseText isn't empty
        if (xmlHttp.responseText) {
             // Parses responseText to JSON
-            var json = JSON.parse(xmlHttp.responseText);
-            state = adaptCalendarResponse(json.items[0])
+            var items = JSON.parse(xmlHttp.responseText).items;
+            var displayItem = items.find(function(item){return item.end.dateTime});
+            state = adaptCalendarResponse(displayItem)
             displayEvent(state);
         }
         else {
