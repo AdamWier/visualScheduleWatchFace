@@ -4,12 +4,6 @@ var progressBarWidget;
     var page = document.getElementById('pageCircleProgressBar'),
         progressBar = document.getElementById('circleprogress'),
         isCircle = tau.support.shape.circle,
-        resultText,
-        i;
-
-    function printResult() {
-       resultText = progressBarWidget.value();
-    }
 
     function clearVariables() {
        page = null;
@@ -26,9 +20,7 @@ var progressBarWidget;
     
     function pageBeforeShowHandler() {
         if (isCircle) {
-            /* Make the circular progressbar object */
             progressBarWidget = new tau.widget.CircleProgressBar(progressBar, {size: 'full', thickness: 30});
-       
         }
 
     }
@@ -36,7 +28,6 @@ var progressBarWidget;
     function pageHideHandler() {
         unbindEvents();
         clearVariables();
-        /* Release the object */
         progressBarWidget.destroy();
     }
 
