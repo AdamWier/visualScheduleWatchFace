@@ -2,7 +2,7 @@
   "name": "emojicalendarface",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/AdamWier/visualScheduleWatchFace/issues"
   },
-  "homepage": "https://github.com/AdamWier/visualScheduleWatchFace#readme"
+  "homepage": "https://github.com/AdamWier/visualScheduleWatchFace#readme",
+  "devDependencies": {
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12"
+  }
 }

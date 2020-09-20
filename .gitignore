@@ -2,3 +2,5 @@
 .sign/*
 .settings/*
 env.js
+node_modules/
+bundle.js

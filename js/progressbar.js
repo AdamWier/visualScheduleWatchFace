@@ -3,7 +3,7 @@ var progressBarWidget;
 (function() {
     var page = document.getElementById('pageCircleProgressBar'),
         progressBar = document.getElementById('circleprogress'),
-        isCircle = tau.support.shape.circle,
+        isCircle = tau.support.shape.circle;
 
     function clearVariables() {
        page = null;
