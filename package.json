@@ -1,0 +1,19 @@
+{
+  "name": "emojicalendarface",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AdamWier/visualScheduleWatchFace.git"
+  },
+  "author": "Adam Wier",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/AdamWier/visualScheduleWatchFace/issues"
+  },
+  "homepage": "https://github.com/AdamWier/visualScheduleWatchFace#readme"
+}
