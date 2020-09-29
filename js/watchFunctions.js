@@ -1,7 +1,6 @@
 import { compose, curry, converge, toString, map, prop, __, equals, cond, always, modulo, concat, nth, join } from 'ramda';
 import { get } from 'date-fp';
 import Either from 'sanctuary-either';
-// import IO from 'fantasy-io';
 
 (function() {
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -12,8 +11,6 @@ import Either from 'sanctuary-either';
         console.log('tick', tick(tizen.time.getCurrentDateTime()));
     }
 
-    // const setInnerHtml = curry((id, string) => IO.of(() => document.getElementById(id).innerHTML = 8)); 
-    
     const insertInTemplate = (time, date) => `
         <div class="small-text">${date}</div>
         <div class="big-text">${time}</div>
