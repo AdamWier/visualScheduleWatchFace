@@ -1,2 +1,2 @@
-import './env.js';
 import './watchFunctions.js';
+import './app.js';
