@@ -58,6 +58,12 @@ function getCalendar() {
 
 function adaptCalendarResponse(json){
 
+	const insertInTemplate = curry(inserts => `
+		<div id="emoji">${inserts.emoji.isNothing ? '' : inserts.emoji.value}</div>
+		<div class="small-text" id="event-name">${inserts.description}</div>
+		<div class="small-text" id="end-time">Finishes @ ${inserts.end}</div>
+	`);
+
 	const getTime = curry(x => x.getTime())
 	
 	const convertToDateTime = curry(x => new Date(x));
@@ -95,7 +101,7 @@ function adaptCalendarResponse(json){
 
 	const getEndString = compose(objOf('end'), join(''), converge(Array.of, [createHourProperty, () => ':', createMinuteProperty]));
 
-	const calendar = compose(converge(merge, [getEndString, processEmoji, calculatePercentage]), getFirstNotFullDayItem, prop('items'));
+	const calendar = compose(insertInTemplate, converge(merge, [getEndString, processEmoji, calculatePercentage]), getFirstNotFullDayItem, prop('items'));
 
 	console.log(calendar(json));
 }
