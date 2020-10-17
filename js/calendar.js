@@ -20,9 +20,11 @@ import {
 	view,
 	replace,
 	__,
+	join
  } from 'ramda';
 import { TEST } from './env.js';
 import Maybe from 'sanctuary-maybe';
+import { formatHours, formatMinutes } from './mutual.js';
 
 window.onload = adaptCalendarResponse(TEST);
 var state;
@@ -87,7 +89,13 @@ function adaptCalendarResponse(json){
 
 	const processEmoji = compose(removeEmoji, converge(merge, [getEmoji, objOf('description')]), prop('summary'));
 
-	const calendar = compose(converge(merge, [processEmoji, calculatePercentage]), getFirstNotFullDayItem, prop('items'));
+	const createMinuteProperty = compose(formatMinutes, convertToDateTime, prop('dateTime'), prop('end'));
+
+	const createHourProperty = compose(formatHours, convertToDateTime, prop('dateTime'), prop('end'));
+
+	const getEndString = compose(objOf('end'), join(''), converge(Array.of, [createHourProperty, () => ':', createMinuteProperty]));
+
+	const calendar = compose(converge(merge, [getEndString, processEmoji, calculatePercentage]), getFirstNotFullDayItem, prop('items'));
 
 	console.log(calendar(json));
 }
