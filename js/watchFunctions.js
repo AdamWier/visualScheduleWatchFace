@@ -1,6 +1,6 @@
-import { compose, curry, converge, toString, map, prop, __, equals, cond, always, modulo, concat, nth, join } from 'ramda';
+import { compose, converge, toString,  __, equals, cond, always, modulo, nth, join } from 'ramda';
+import { formatHours, formatMinutes } from './mutual.js';
 import { get } from 'date-fp';
-import Either from 'sanctuary-either';
 
 (function() {
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -32,12 +32,6 @@ import Either from 'sanctuary-either';
     const isOdd = compose(equals(1), modulo(__, 2));
 
     const formatConsole = compose(returnConsole, isOdd, get('milliseconds'));
-
-    const isLessThanTen = curry((minutes) => minutes < 10 ? Either.Right(toString(minutes)) : Either.Left(toString(minutes)));
-    
-    const formatMinutes = compose(prop('value'), map(concat('0')), isLessThanTen, get('minutes'));
-    
-    const formatHours = compose(toString, get('hours'));
 
     const formatTime = compose(join(''), converge(Array.of, [formatHours, formatConsole, formatMinutes]))
 
