@@ -37,5 +37,5 @@ import { get } from 'date-fp';
 
     const tick = converge(insertInTemplate, [formatTime, formatDate]);
 
-    window.onload = init();
+    // window.onload = init();
 }());

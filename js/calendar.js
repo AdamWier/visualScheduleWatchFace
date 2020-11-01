@@ -26,7 +26,7 @@ import { TEST } from './env.js';
 import Maybe from 'sanctuary-maybe';
 import { formatHours, formatMinutes } from './mutual.js';
 
-window.onload = adaptCalendarResponse(TEST);
+// window.onload = adaptCalendarResponse(TEST);
 var state;
 
 function getCalendar() {
