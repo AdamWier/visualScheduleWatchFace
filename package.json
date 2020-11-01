@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "date-fp": "^5.0.3",
+    "fluture": "^13.0.1",
     "ramda": "^0.27.1",
     "sanctuary-either": "^2.1.0",
     "sanctuary-maybe": "^2.1.0"
