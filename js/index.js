@@ -1,20 +1,19 @@
-import { value, ap, resolve } from 'fluture';
+import { forkCatch } from 'fluture';
 import { calendar } from './calendar';
-import { compose, converge, concat, append, reduceRight } from 'ramda';
+import { compose, converge, concat, curry, head, over, lensIndex, prop } from 'ramda';
 import { tick } from './watchFunctions';
 
 window.onload = app;
 
-const helper = (toApply, accumulator) => accumulator ? toApply(accumulator) : toApply;
+const insert = curry((x) => document.getElementById('result').innerHTML = x);
 
-const apCalendar = compose(ap, calendar);
+const main = compose(over(lensIndex(1), concat), converge(Array.of, [calendar, tick]));
 
-const apTick = compose(ap, resolve, tick);
-
-const main = compose(reduceRight(helper, null), append(resolve(concat)), converge(Array.of, [apCalendar, apTick]));
+const insertInTemplate = curry(x => `<span>${x}</span>`)
 
 function app(){
     console.log('ok go');
-    console.log('main', main(new Date()));
-    value(console.log)(main(new Date()));
+    const mainres = main(new Date());
+    console.log({mainres});
+    console.log('go go go', forkCatch(compose(insert, mainres[1], insertInTemplate, prop('message')))(compose(insert, mainres[1], insertInTemplate, prop('message')))((x) => compose(insert, mainres[1], head)(x))(mainres[0]))
 };

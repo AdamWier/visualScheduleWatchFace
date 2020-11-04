@@ -16,6 +16,7 @@ import {
 	lensProp,
 	objOf,
 	merge,
+	mergeAll,
 	lensIndex,
 	view,
 	replace,
@@ -25,11 +26,13 @@ import {
 	chain,
 	concat,
 	map,
+	reduceRight,
+	append
  } from 'ramda';
 import Maybe from 'sanctuary-maybe';
 import { formatHours, formatMinutes } from './utils';
 import { API_KEY, CALENDAR } from './env';
-import { encaseP } from 'fluture';
+import { encaseP, attempt, both } from 'fluture';
 
 const insertInTemplate = curry(inserts => `
 	<div id="emoji">${inserts.emoji.isNothing ? '' : inserts.emoji.value}</div>
@@ -74,7 +77,11 @@ const createHourProperty = compose(formatHours, convertToDateTime, prop('dateTim
 
 const getEndString = compose(objOf('end'), join(''), converge(Array.of, [createHourProperty, () => ':', createMinuteProperty]));
 
-const getItemData = compose(insertInTemplate, converge(merge, [getEndString, processEmoji, calculatePercentage]), getFirstNotFullDayItem, prop('items'));
+const setPercentage = curry(x => attempt(() => {const circle = new tau.widget.CircleProgressBar(document.getElementById('circleprogress'), {size: 'full', thickness: 30}); return circle.value(x)}));
+
+const createProgressBar = compose(setPercentage, prop('percentage'));
+
+const getItemData = compose(mergeAll, converge(Array.of, [getEndString, processEmoji, calculatePercentage]), getFirstNotFullDayItem, prop('items'));
 
 const fetchFuture = curry(encaseP(fetch));
 
@@ -86,11 +93,6 @@ const toIsoString = curry(x => x.toISOString());
 
 const getApiAddress = compose(concat(`https://www.googleapis.com/calendar/v3/calendars/${CALENDAR}/events?orderBy=startTime&singleEvents=true&maxResults=10&key=${API_KEY}&timeMin=`), toIsoString);
 
-export const calendar = compose(map(getItemData), fetchJson, getApiAddress);
+const helper = (toApply, accumulator) => accumulator ? accumulator(toApply) : toApply;
 
-function displayEvent(event){
-	progressBarWidget.value(event.percentage);
-	document.getElementById("event-name").innerHTML = event.name;
-	document.getElementById("finish").innerHTML = event.finish;
-	document.getElementById("emoji").innerHTML = event.emoji;
-}
+export const calendar = compose(reduceRight(helper, null), append(both), converge(Array.of, [chain(createProgressBar), map(insertInTemplate)]), map(getItemData), fetchJson, getApiAddress);
