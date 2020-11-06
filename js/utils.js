@@ -7,3 +7,5 @@ const isLessThanTen = curry((minutes) => minutes < 10 ? Either.Right(toString(mi
 export const formatMinutes = compose(prop('value'), map(concat('0')), isLessThanTen, get('minutes'));
 
 export const formatHours = compose(toString, get('hours'));
+
+export const bothHelper = (next, accumulator) => accumulator ? accumulator(next) : next;

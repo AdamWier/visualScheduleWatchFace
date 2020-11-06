@@ -30,15 +30,19 @@ import {
 	append
  } from 'ramda';
 import Maybe from 'sanctuary-maybe';
-import { formatHours, formatMinutes } from './utils';
+import { formatHours, formatMinutes, bothHelper } from './utils';
 import { API_KEY, CALENDAR } from './env';
 import { encaseP, attempt, both } from 'fluture';
+
+const insertEventHtml = curry((x) => attempt(() => document.getElementById('event').innerHTML = x));
 
 const insertInTemplate = curry(inserts => `
 	<div id="emoji">${inserts.emoji.isNothing ? '' : inserts.emoji.value}</div>
 	<div class="small-text" id="event-name">${inserts.description}</div>
 	<div class="small-text" id="end-time">Finishes @ ${inserts.end}</div>
 `);
+
+const insertEventInfo = compose(insertEventHtml, insertInTemplate);
 
 const getTime = curry(x => x.getTime())
 
@@ -77,7 +81,7 @@ const createHourProperty = compose(formatHours, convertToDateTime, prop('dateTim
 
 const getEndString = compose(objOf('end'), join(''), converge(Array.of, [createHourProperty, () => ':', createMinuteProperty]));
 
-const setPercentage = curry(x => attempt(() => {const circle = new tau.widget.CircleProgressBar(document.getElementById('circleprogress'), {size: 'full', thickness: 30}); return circle.value(x)}));
+const setPercentage = curry(x => attempt(() => {const circle = new tau.widget.CircleProgressBar(document.getElementById('circleprogress'), {size: 'full', thickness: 30}); circle.value(x); return x}));
 
 const createProgressBar = compose(setPercentage, prop('percentage'));
 
@@ -93,6 +97,4 @@ const toIsoString = curry(x => x.toISOString());
 
 const getApiAddress = compose(concat(`https://www.googleapis.com/calendar/v3/calendars/${CALENDAR}/events?orderBy=startTime&singleEvents=true&maxResults=10&key=${API_KEY}&timeMin=`), toIsoString);
 
-const helper = (toApply, accumulator) => accumulator ? accumulator(toApply) : toApply;
-
-export const calendar = compose(reduceRight(helper, null), append(both), converge(Array.of, [chain(createProgressBar), map(insertInTemplate)]), map(getItemData), fetchJson, getApiAddress);
+export const calendar = compose(reduceRight(bothHelper, null), append(both), converge(Array.of, [chain(createProgressBar), chain(insertEventInfo)]), map(getItemData), fetchJson, getApiAddress);
