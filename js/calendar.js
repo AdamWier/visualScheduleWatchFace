@@ -33,7 +33,8 @@ import {
 import Maybe from 'sanctuary-maybe';
 import { formatHours, formatMinutes, bothHelper } from './utils';
 import { API_KEY, CALENDAR } from './env';
-import { encaseP, attempt, both } from 'fluture';
+import { encaseP, attempt, both, resolve } from 'fluture';
+import Either from 'sanctuary-either';
 
 const insertEventHtml = curry((x) => attempt(() => document.getElementById('event').innerHTML = x));
 
@@ -100,4 +101,10 @@ const toIsoString = curry(x => x.toISOString());
 
 const getApiAddress = compose(concat(`https://www.googleapis.com/calendar/v3/calendars/${CALENDAR}/events?orderBy=startTime&singleEvents=true&maxResults=10&key=${API_KEY}&timeMin=`), toIsoString);
 
-export const calendar = compose(reduceRight(bothHelper, null), append(both), converge(Array.of, [chain(createProgressBar), chain(insertEventInfo)]), map(getItemData), fetchJson, getApiAddress);
+const processItem = compose(reduceRight(bothHelper, null), append(both), converge(Array.of, [chain(createProgressBar), chain(insertEventInfo)]), map(getItemData));
+
+const callApi = compose(fetchJson, getApiAddress);
+
+const toEither = curry(x => x.item.isNothing ? Either.Right(x.time) : Either.Left(resolve(x.item.value)));
+
+export const calendar = compose(processItem, prop('value'), map(callApi), toEither);
