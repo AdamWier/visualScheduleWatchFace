@@ -27,7 +27,8 @@ import {
 	concat,
 	map,
 	reduceRight,
-	append
+	append,
+	identity,
  } from 'ramda';
 import Maybe from 'sanctuary-maybe';
 import { formatHours, formatMinutes, bothHelper } from './utils';
@@ -81,11 +82,13 @@ const createHourProperty = compose(formatHours, convertToDateTime, prop('dateTim
 
 const getEndString = compose(objOf('end'), join(''), converge(Array.of, [createHourProperty, () => ':', createMinuteProperty]));
 
-const setPercentage = curry(x => attempt(() => {const circle = new tau.widget.CircleProgressBar(document.getElementById('circleprogress'), {size: 'full', thickness: 30}); circle.value(x); return x}));
+const setPercentage = curry(x => attempt(() => {const circle = new tau.widget.CircleProgressBar(document.getElementById('circleprogress'), {size: 'full', thickness: 30}); circle.value(x.percentage); return x}));
 
-const createProgressBar = compose(setPercentage, prop('percentage'));
+const createProgressBar = compose(setPercentage);
 
-const getItemData = compose(mergeAll, converge(Array.of, [getEndString, processEmoji, calculatePercentage]), getFirstNotFullDayItem, prop('items'));
+const keepItemData = compose(objOf('original'), identity);
+
+const getItemData = compose(mergeAll, converge(Array.of, [keepItemData, getEndString, processEmoji, calculatePercentage]), getFirstNotFullDayItem, prop('items'));
 
 const fetchFuture = curry(encaseP(fetch));
 
