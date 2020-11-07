@@ -18,17 +18,19 @@ const getMonth = compose(nth(__, months), invoker(0, 'getMonth'));
 
 const getDay = compose(nth(__, days), invoker(0, 'getDay'));
 
+const addSpan = curry(x => `<span>${x}</span>`)
+
 const formatDate = compose(join(' '), converge(Array.of, [getDay, getMonth, getDate]));
 
 const returnConsole = cond([
     [equals(true), always(':')],
-    [equals(false), always(' ')],
+    [equals(false), always('&nbsp;')],
 ]);
 
 const isOdd = compose(equals(1), modulo(__, 2));
 
 const formatConsole = compose(returnConsole, isOdd, invoker(0, 'getSeconds'));
 
-const formatTime = compose(join(''), converge(Array.of, [formatHours, formatConsole, formatMinutes]))
+const formatTime = compose(join(''), map(addSpan), converge(Array.of, [formatHours, formatConsole, formatMinutes]))
 
 export const tick = compose(chain(insertTimeHtml), map(converge(insertInTemplate, [formatTime, formatDate])), prop('time'));
