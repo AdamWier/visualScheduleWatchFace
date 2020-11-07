@@ -28,7 +28,7 @@ const returnConsole = cond([
 
 const isOdd = compose(equals(1), modulo(__, 2));
 
-const formatConsole = compose(returnConsole, isOdd, get('milliseconds'));
+const formatConsole = compose(returnConsole, isOdd, get('seconds'));
 
 const formatTime = compose(join(''), converge(Array.of, [formatHours, formatConsole, formatMinutes]))
 
