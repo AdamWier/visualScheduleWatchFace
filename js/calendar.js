@@ -89,7 +89,7 @@ const createProgressBar = compose(setPercentage);
 
 const keepItemData = compose(objOf('original'), identity);
 
-const getItemData = compose(mergeAll, converge(Array.of, [keepItemData, getEndString, processEmoji, calculatePercentage]), getFirstNotFullDayItem, prop('items'));
+const getItemData = compose(mergeAll, converge(Array.of, [keepItemData, getEndString, processEmoji, calculatePercentage]));
 
 const fetchFuture = curry(encaseP(fetch));
 
@@ -103,7 +103,7 @@ const getApiAddress = compose(concat(`https://www.googleapis.com/calendar/v3/cal
 
 const processItem = compose(reduceRight(bothHelper, null), append(both), converge(Array.of, [chain(createProgressBar), chain(insertEventInfo)]), map(getItemData));
 
-const callApi = compose(fetchJson, getApiAddress);
+const callApi = compose(map(getFirstNotFullDayItem), map(prop('items')), chain(fetchJson), map(getApiAddress));
 
 const toEither = curry(x => x.item.isNothing ? Either.Right(x.time) : Either.Left(resolve(x.item.value)));
 

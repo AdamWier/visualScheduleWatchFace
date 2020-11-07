@@ -1,4 +1,4 @@
-import { compose, converge, toString,  __, equals, cond, always, modulo, nth, join, curry, prop } from 'ramda';
+import { compose, converge, toString,  __, equals, cond, always, modulo, nth, join, curry, prop, map, chain } from 'ramda';
 import { formatHours, formatMinutes } from './utils';
 import { get } from 'date-fp';
 import { attempt } from 'fluture';
@@ -32,4 +32,4 @@ const formatConsole = compose(returnConsole, isOdd, get('milliseconds'));
 
 const formatTime = compose(join(''), converge(Array.of, [formatHours, formatConsole, formatMinutes]))
 
-export const tick = compose(insertTimeHtml, converge(insertInTemplate, [formatTime, formatDate]), prop('time'));
+export const tick = compose(chain(insertTimeHtml), map(converge(insertInTemplate, [formatTime, formatDate])), prop('time'));
