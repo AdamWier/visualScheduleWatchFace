@@ -1,8 +1,8 @@
-import { forkCatch, both, attempt } from 'fluture';
+import { forkCatch, both } from 'fluture';
 import { calendar } from './calendar';
 import { compose, converge, reduceRight, append, nth, merge, objOf, curry } from 'ramda';
 import { tick } from './watchFunctions';
-import { bothHelper } from './utils';
+import { bothHelper, time } from './utils';
 import Maybe from 'sanctuary-maybe';
 
 window.onload = app;
@@ -10,8 +10,6 @@ window.onload = app;
 var curriedSetTimeout = curry((y, z) => setTimeout(main, y, z));
 
 const toMaybe = compose(x => x.percentage >= 100 ? Maybe.Nothing : Maybe.Just(x.original));
-
-const time = attempt(() => new Date());
 
 var onSuccess = compose(curriedSetTimeout(500), merge({time}), objOf('item'), toMaybe, nth(1), nth(1));
 
