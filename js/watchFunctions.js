@@ -1,6 +1,5 @@
-import { compose, converge, toString,  __, equals, cond, always, modulo, nth, join, curry, prop, map, chain } from 'ramda';
+import { compose, converge, toString,  __, equals, cond, always, modulo, nth, join, curry, prop, map, chain, invoker } from 'ramda';
 import { formatHours, formatMinutes } from './utils';
-import { get } from 'date-fp';
 import { attempt } from 'fluture';
 
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -13,11 +12,11 @@ const insertInTemplate = (time, date) => `
     <div class="big-text">${time}</div>
 `;
 
-const getDate = compose(toString, get('date'));
+const getDate = compose(toString, invoker(0, 'getDate'));
 
-const getMonth = compose(nth(__, months), get('month'));
+const getMonth = compose(nth(__, months), invoker(0, 'getMonth'));
 
-const getDay = compose(nth(__, days), get('day'));
+const getDay = compose(nth(__, days), invoker(0, 'getDay'));
 
 const formatDate = compose(join(' '), converge(Array.of, [getDay, getMonth, getDate]));
 
@@ -28,7 +27,7 @@ const returnConsole = cond([
 
 const isOdd = compose(equals(1), modulo(__, 2));
 
-const formatConsole = compose(returnConsole, isOdd, get('seconds'));
+const formatConsole = compose(returnConsole, isOdd, invoker(0, 'getSeconds'));
 
 const formatTime = compose(join(''), converge(Array.of, [formatHours, formatConsole, formatMinutes]))
 
