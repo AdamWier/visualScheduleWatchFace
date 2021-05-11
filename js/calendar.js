@@ -26,17 +26,15 @@ import {
 	chain,
 	concat,
 	map,
-	reduceRight,
-	append,
 	identity,
 	lift,
 	sequence,
 	assoc,
  } from 'ramda';
 import Maybe from 'sanctuary-maybe';
-import { formatHours, formatMinutes, bothHelper, time } from './utils';
+import { formatHours, formatMinutes, time } from './utils';
 import { API_KEY, CALENDAR } from './env';
-import { encaseP, attempt, both, resolve } from 'fluture';
+import { encaseP, attempt, resolve, parallel } from 'fluture';
 import Either from 'sanctuary-either';
 
 const insertEventHtml = curry((x) => attempt(() => document.getElementById('event').innerHTML = x));
@@ -112,7 +110,7 @@ const toIsoString = curry(x => x.toISOString());
 
 const getApiAddress = compose(concat(`https://www.googleapis.com/calendar/v3/calendars/${CALENDAR}/events?orderBy=startTime&singleEvents=true&maxResults=10&key=${API_KEY}&timeMin=`), toIsoString);
 
-const processItem = compose(reduceRight(bothHelper, null), append(both), converge(Array.of, [chain(setPercentage), chain(insertEventInfo)]), getItemData);
+const processItem = compose(parallel(2), converge(Array.of, [chain(setPercentage), chain(insertEventInfo)]), getItemData);
 
 const callApi = compose(map(getFirstNotFullDayItem), map(prop('items')), chain(fetchJson), map(getApiAddress), prop('time'));
 

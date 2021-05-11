@@ -8,10 +8,10 @@ export const formatMinutes = compose(prop('value'), map(concat('0')), isLessThan
 
 export const formatHours = compose(toString, invoker(0, 'getHours'));
 
-export const bothHelper = (next, accumulator) => accumulator ? accumulator(next) : next;
-
 const getTizTime = attempt(() => tizen.time.getCurrentDateTime());
 
 const convertTizToJs = curry(x => attempt(() => new Date(x.getFullYear(), x.getMonth(), x.getDate(), x.getHours(), x.getMinutes(), x.getSeconds(), x.getMilliseconds())));
 
 export const time = chain(convertTizToJs)(getTizTime);
+
+export const log = curry(x => {console.log(x); return x});
