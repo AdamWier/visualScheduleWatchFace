@@ -32,8 +32,8 @@ import {
 	assoc,
  } from 'ramda';
 import Maybe from 'sanctuary-maybe';
-import { formatHours, formatMinutes, time } from './utils';
-import { API_KEY, CALENDAR } from './env';
+import { formatHours, formatMinutes, time, log } from '../utils';
+import { API_KEY, CALENDAR } from '../env';
 import { encaseP, attempt, resolve, parallel } from 'fluture';
 import Either from 'sanctuary-either';
 
