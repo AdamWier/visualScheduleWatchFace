@@ -2,7 +2,7 @@ import { forkCatch, parallel, resolve } from 'fluture';
 import { calendar } from './calendar/';
 import { compose, converge, append, head, objOf, curry, mergeAll, pick, over, lensProp } from 'ramda';
 import { tick } from './watchFunctions';
-import { time, log } from './utils';
+import { time } from './utils';
 import Maybe from 'sanctuary-maybe';
 
 window.onload = app;
