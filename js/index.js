@@ -11,10 +11,10 @@ const curriedSetTimeout = curry((y, z) => setTimeout(main, y, z));
 
 const toMaybe = compose(x => x.percentage >= 100 ? Maybe.Nothing : Maybe.Just(resolve(x.item)));
 
-var onSuccess = compose(curriedSetTimeout(500), over(lensProp('progressBar'), Maybe.Just), mergeAll, append({time}), converge(Array.of, [compose(objOf('item'), toMaybe), pick(['progressBar'])]), head, head);
+var onSuccess = compose(curriedSetTimeout(500), over(lensProp('alarms'), resolve), over(lensProp('progressBar'), Maybe.Just), mergeAll, append({time}), converge(Array.of, [compose(objOf('item'), toMaybe), pick(['progressBar', 'alarms'])]), head, head);
 
 var main = compose(forkCatch(console.log)(console.log)(onSuccess), parallel(2), converge(Array.of, [calendar, tick]));
 
 function app(){
-    main({time, item: Maybe.Nothing, progressBar: Maybe.Nothing});
+    main({time, item: Maybe.Nothing, progressBar: Maybe.Nothing, alarms: []});
 };

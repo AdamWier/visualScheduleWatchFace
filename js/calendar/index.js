@@ -11,6 +11,9 @@ import {
 import getItemFromApi from './getItemFromApi';
 import processItem from './processItem';
 import { toEither } from '../utils';
+import setUpAlarms from './alarms';
+
+const addAlarms = converge(assoc('alarms'), [setUpAlarms, identity])
 
 const addItem = converge(assoc('item'), [getItemFromApi, identity])
 
@@ -18,4 +21,4 @@ const passItem = compose(converge(assoc('item'), [path(['item', 'value']), ident
 
 const hasItem = compose(prop('isJust'), prop('item'));
 
-export const calendar = compose(processItem, prop('value'), map(addItem), toEither(hasItem, passItem, identity));
+export const calendar = compose(processItem, prop('value'), map(addAlarms), map(addItem), toEither(hasItem, passItem, identity));

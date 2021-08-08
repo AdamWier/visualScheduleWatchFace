@@ -10,16 +10,10 @@ import {
 	chain,
 	map,
  } from 'ramda';
-import { time, liftedSub, liftedDivide, curriedFloor, convertToDateTime } from '../../../utils';
+import { time, liftedSub, liftedDivide, curriedFloor, getStart, getEnd } from '../../../utils';
 import { resolve } from 'fluture';
 
-const getTime = curry(x => x.getTime())
-
-const getStart = compose(getTime, convertToDateTime, prop('dateTime'), prop('start'));
-
 const calculateDifference = compose(liftedSub(time), resolve, getStart);
-
-const getEnd = compose(getTime, convertToDateTime, prop('dateTime'), prop('end'));
 
 const calculateRange = compose(resolve, converge(subtract, [getEnd, getStart]));
 

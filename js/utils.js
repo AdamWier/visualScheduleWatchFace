@@ -40,4 +40,10 @@ export const toMaybe = cond([
 
 export const convertToDateTime = curry(x => new Date(x));
 
+export const getTime = curry(x => x.getTime())
+
+export const getStart = compose(getTime, convertToDateTime, prop('dateTime'), prop('start'));
+
+export const getEnd = compose(getTime, convertToDateTime, prop('dateTime'), prop('end'));
+
 export const remove = replace(__, '');
