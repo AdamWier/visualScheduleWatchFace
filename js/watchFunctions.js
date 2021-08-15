@@ -33,4 +33,4 @@ const formatConsole = compose(returnConsole, isOdd, invoker(0, 'getSeconds'));
 
 const formatTime = compose(join(''), map(addSpan), converge(Array.of, [formatHours, formatConsole, formatMinutes]))
 
-export const tick = compose(chain(insertTimeHtml), map(converge(insertInTemplate, [formatTime, formatDate])), prop('time'));
+export const tick = compose(chain(insertTimeHtml), map(converge(insertInTemplate, [formatTime, formatDate])));

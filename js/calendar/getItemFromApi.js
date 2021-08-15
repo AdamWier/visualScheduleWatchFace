@@ -8,8 +8,9 @@ import {
 	chain,
 	concat,
 	map,
+	always,
  } from 'ramda';
-import { fetchJson } from '../utils';
+import { fetchJson, time } from '../utils';
 import { API_KEY, CALENDAR } from '../env';
 
 const getFirstNotFullDayItem = compose(find(propSatisfies(item => !!item.dateTime, 'end')), prop('items'));
@@ -20,4 +21,4 @@ const getApiAddress = compose(concat(`https://www.googleapis.com/calendar/v3/cal
 
 const callApi = compose(fetchJson, getApiAddress);
 
-export default compose(map(getFirstNotFullDayItem), chain(callApi), prop('time'));
+export default compose(map(getFirstNotFullDayItem), chain(callApi), always(time));
