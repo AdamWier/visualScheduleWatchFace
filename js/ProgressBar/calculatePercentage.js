@@ -9,7 +9,7 @@ import {
 	map,
 	max,
  } from 'ramda';
-import { time, liftedSub, liftedDivide, curriedFloor, getStart, getEnd } from '../../../utils';
+import { time, liftedSub, liftedDivide, curriedFloor, getStart, getEnd } from '../utils';
 import { resolve } from 'fluture';
 
 const calculateDifference = compose(liftedSub(time), resolve, getStart);

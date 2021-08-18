@@ -6,15 +6,8 @@ import Maybe from 'sanctuary-maybe';
 // import { fromEvent } from "rxjs";
 import getItemFromApi from './calendar/getItemFromApi';
 import setUpAlarms from './calendar/alarms';
-import createProgressBar from './calendar/processItem/getItemData/createProgressBar';
 import processItem from './calendar/processItem';
-import calculatePercentage from './calendar/processItem/getItemData/calculatePercentage';
-
-const setPercentage = curry((percentage, progressBar) => {console.log("per, pro", percentage, progressBar); return (ap (percentage) (ap (progressBar) (resolve((progressBar) => percent => {console.log('two rgas', progressBar, percent); progressBar.value(percent); return progressBar}))))});
-
-const setProgressPercent = converge(setPercentage, [calculatePercentage, createProgressBar]);
-
-const handleProgressBar = converge(assoc('progressBar'), [setProgressPercent, identity], log('before reset'))
+import setProgressPercent from './ProgressBar/setProgressPercent';
 
 window.onload = app;
 
@@ -27,6 +20,8 @@ window.onload = app;
 const execute = compose(forkCatch(console.log)(console.log)(console.log), parallel(5), values);
 
 const addTime = over(lensProp('time'), tick);
+
+const handleProgressBar = converge(assoc('progressBar'), [setProgressPercent, identity])
 
 const addHtmlInsert = converge(assoc('insert'), [processItem, identity]);
 
