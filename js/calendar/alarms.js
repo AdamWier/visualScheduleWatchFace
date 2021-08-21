@@ -1,10 +1,11 @@
 import { prop, map, curry, compose, converge, __, zipWith, filter, chain, sequence, objOf } from 'ramda';
-import { getStart, getEnd, convertToDateTime } from '../utils';
+import { getStart, getEnd, convertToDateTime, applyFutures } from '../utils';
 import { attempt, resolve } from 'fluture'
+import { log } from '../utils'
 
-const addNotificationToAlarm = curry((notification, alarm) => {tizen.alarm.addAlarmNotification(alarm, notification); return alarm})
+const addNotificationToAlarm = curry((alarm, notification) => {tizen.alarm.addAlarmNotification(alarm, notification); return alarm})
 
-const notifications = [
+const notifications = resolve([
 	new tizen.UserNotification('SIMPLE', '90%', 
 		{
 			content: 'Time to move on',
@@ -29,7 +30,7 @@ const notifications = [
 			},
 		}
 	),
-]
+]);
 
 const createAlarm = curry(x => attempt(() => new tizen.AlarmAbsolute(x)));
 
@@ -45,6 +46,6 @@ const calculateTime = curry((end, start, percent) => (percent * (end - start)) +
 
 const getAlarmTimes = compose(getTimesByPercentage, converge(calculateTime, [getEnd, getStart]));
 
-const createAlarms = compose(map(zipWith(addNotificationToAlarm, notifications)), sequence(resolve), map(createAlarm), filter(isFuture), map(convertToDateTime), getAlarmTimes)
+const createAlarms = compose(applyFutures(zipWith(addNotificationToAlarm))(notifications), log('before apply'), sequence(resolve), map(createAlarm), filter(isFuture), map(convertToDateTime), getAlarmTimes)
 
 export default compose(map(objOf('alarms')), chain(createAlarms), prop('item'));

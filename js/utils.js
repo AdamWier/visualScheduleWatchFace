@@ -1,7 +1,9 @@
 import { compose, toString, concat, map, prop, curry, invoker, chain, replace, lift, equals, always, cond, divide, subtract, __ } from 'ramda';
 import Either from 'sanctuary-either';
-import { attempt, encaseP } from 'fluture';
+import { attempt, encaseP, ap, resolve } from 'fluture';
 import Maybe from 'sanctuary-maybe';
+
+export const applyFutures = curry((functionToApply, secondArgument, firstArgument) => (ap (secondArgument) (ap (firstArgument) (resolve(functionToApply)))));
 
 const isLessThanTen = curry((minutes) => minutes < 10 ? Either.Right(toString(minutes)) : Either.Left(toString(minutes)));
     
