@@ -46,6 +46,6 @@ const calculateTime = curry((end, start, percent) => (percent * (end - start)) +
 
 const getAlarmTimes = compose(getTimesByPercentage, converge(calculateTime, [getEnd, getStart]));
 
-const createAlarms = compose(applyFutures(zipWith(addNotificationToAlarm))(notifications), log('before apply'), sequence(resolve), map(createAlarm), filter(isFuture), map(convertToDateTime), getAlarmTimes)
+const createAlarms = compose(applyFutures(zipWith(addNotificationToAlarm))(notifications), sequence(resolve), map(createAlarm), filter(isFuture), map(convertToDateTime), getAlarmTimes)
 
 export default compose(map(objOf('alarms')), chain(createAlarms), prop('item'));

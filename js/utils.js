@@ -3,6 +3,8 @@ import Either from 'sanctuary-either';
 import { attempt, encaseP, ap, resolve } from 'fluture';
 import Maybe from 'sanctuary-maybe';
 
+export const toMaybe2 = curry((condition, x) => condition(x) ? Maybe.Just(x) : Maybe.isNothing);
+
 export const applyFutures = curry((functionToApply, secondArgument, firstArgument) => (ap (secondArgument) (ap (firstArgument) (resolve(functionToApply)))));
 
 const isLessThanTen = curry((minutes) => minutes < 10 ? Either.Right(toString(minutes)) : Either.Left(toString(minutes)));
