@@ -1,7 +1,7 @@
 import { fork, parallel, resolve, } from 'fluture';
 import { compose, converge, curry, over, lensProp, map, prop, identity, path, assoc, values, objOf, mergeAll } from 'ramda';
 import { tick } from './watchFunctions';
-import { time, toEither, log, toMaybe2, getEnd } from './utils';
+import { time, toEither, toMaybe2, getEnd } from './utils';
 import Maybe from 'sanctuary-maybe';
 import { fromEvent } from "rxjs";
 import { debounceTime } from 'rxjs/operators';
@@ -21,7 +21,7 @@ const isNotInPast = curry((testTime) => new Date().getTime() < testTime);
 
 const isExpiredItem = compose(isNotInPast, getEnd);
 
-const onSuccess = compose(log('after timeout'), curriedSetTimeout(500), log('before timeout'), over(lensProp('alarms'), compose(resolve, objOf('alarms'))), over(lensProp('progressBar'), Maybe.Just), over(lensProp('item'), toMaybe2(isExpiredItem)), assoc('time', time), mergeAll);
+const onSuccess = compose(curriedSetTimeout(500), over(lensProp('alarms'), compose(resolve, objOf('alarms'))), over(lensProp('progressBar'), Maybe.Just), over(lensProp('item'), toMaybe2(isExpiredItem)), assoc('time', time), mergeAll);
 
 const execute = compose(fork(console.log)(onSuccess), parallel(5), values);
 
