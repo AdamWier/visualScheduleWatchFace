@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npx webpack --config webpack.config.js --mode development --watch"
+    "dev": "npx webpack --config webpack.config.js --mode development --watch",
+    "prod": "npx webpack --config webpack.config.js --mode production"
   },
   "repository": {
     "type": "git",
