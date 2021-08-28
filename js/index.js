@@ -49,7 +49,8 @@ let state = DEFAULT_STATE;
 function app(){
     main(state);
     fromEvent(document, "touchstart").pipe(debounceTime(500)).subscribe(() => {
-        clearTimeout(timeout)
+        clearTimeout(timeout);
+        tizen.alarm.removeAll();
         main(DEFAULT_STATE);
     })
 };

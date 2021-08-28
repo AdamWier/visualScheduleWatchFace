@@ -34,10 +34,6 @@ const notifications = resolve([
 
 const createAlarm = curry(x => attempt(() => new tizen.AlarmAbsolute(x)));
 
-// const disable = curry(x=> attempt(() => {tizen.alarm.remove(x)}));
-
-// const disableAlarms = compose(disable, prop('id'));
-
 const isFuture = x => x > new Date();
 
 const getTimesByPercentage = map(__, [.9, .75, .5]);
