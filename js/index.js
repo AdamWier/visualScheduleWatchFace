@@ -11,6 +11,7 @@ import processItem from './calendar/processItem';
 import setProgressPercent from './ProgressBar/setProgressPercent';
 
 window.onload = app;
+window.onunload = clearOutState;
 
 let timeout = 0;
 
@@ -46,11 +47,15 @@ const DEFAULT_STATE = {time, item: Maybe.Nothing, progressBar: Maybe.Nothing, al
 
 let state = DEFAULT_STATE;
 
+function clearOutState(){
+    clearTimeout(timeout);
+    tizen.alarm.removeAll();
+}
+
 function app(){
     main(state);
     fromEvent(document, "touchstart").pipe(debounceTime(500)).subscribe(() => {
-        clearTimeout(timeout);
-        tizen.alarm.removeAll();
+        clearOutState();
         main(DEFAULT_STATE);
     })
 };
