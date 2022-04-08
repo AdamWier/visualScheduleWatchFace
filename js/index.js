@@ -23,7 +23,7 @@ const isExpiredItem = compose(isNotInPast, getEnd);
 
 const onSuccess = compose(curriedSetTimeout(500), over(lensProp('alarms'), compose(resolve, objOf('alarms'))), over(lensProp('progressBar'), Maybe.Just), over(lensProp('item'), toMaybe2(isExpiredItem)), assoc('time', time), mergeAll);
 
-const execute = compose(fork(console.log)(onSuccess), parallel(5), values);
+const execute = compose(fork(() => {document.getElementById('event').innerText = 'ERROR'})(onSuccess), parallel(5), values);
 
 const addTime = over(lensProp('time'), tick);
 
