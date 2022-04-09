@@ -1,4 +1,4 @@
-import { compose, toString, concat, map, prop, curry, invoker, chain, replace, lift, equals, always, cond, divide, subtract, __ } from 'ramda';
+import { compose, toString, concat, map, prop, curry, invoker, chain, replace, lift, equals, always, cond, divide, subtract, __, min } from 'ramda';
 import Either from 'sanctuary-either';
 import { attempt, encaseP, ap, resolve } from 'fluture';
 import Maybe from 'sanctuary-maybe';
@@ -46,7 +46,7 @@ export const convertToDateTime = curry(x => new Date(x));
 
 export const getTime = curry(x => x.getTime())
 
-export const getStart = compose(getTime, convertToDateTime, prop('dateTime'), prop('start'));
+export const getStart = compose(min(new Date().getTime()), getTime, convertToDateTime, prop('dateTime'), prop('start'));
 
 export const getEnd = compose(getTime, convertToDateTime, prop('dateTime'), prop('end'));
 
