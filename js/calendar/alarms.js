@@ -5,6 +5,14 @@ import { attempt, resolve } from 'fluture'
 const addNotificationToAlarm = curry((alarm, notification) => {tizen.alarm.addAlarmNotification(alarm, notification); return alarm})
 
 const notifications = resolve([
+	new tizen.UserNotification('SIMPLE', '100%', 
+		{
+			content: 'All done!',
+			actions: {
+				vibration: true,
+			},
+		}
+	),
 	new tizen.UserNotification('SIMPLE', '90%', 
 		{
 			content: 'Time to move on',
@@ -35,7 +43,7 @@ const createAlarm = curry(x => attempt(() => new tizen.AlarmAbsolute(x)));
 
 const isFuture = x => x > new Date();
 
-const getTimesByPercentage = map(__, [.9, .75, .5]);
+const getTimesByPercentage = map(__, [1, .9, .75, .5]);
 
 const calculateTime = curry((end, start, percent) => (percent * (end - start)) + start)
 
