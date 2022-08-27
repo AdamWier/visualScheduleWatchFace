@@ -1,7 +1,7 @@
 import { fork, parallel, resolve, } from 'fluture';
-import { compose, converge, curry, over, lensProp, map, prop, identity, path, assoc, values, objOf, mergeAll } from 'ramda';
+import { compose, converge, curry, over, lensProp, map, prop, identity, path, assoc, values, objOf, mergeAll, cond, equals, always } from 'ramda';
 import { tick } from './watchFunctions';
-import { time, toEither, toMaybe2, getEnd } from './utils';
+import { time, toEither, toMaybe2, getEnd, log } from './utils';
 import Maybe from 'sanctuary-maybe';
 import { fromEvent } from "rxjs";
 import { debounceTime } from 'rxjs/operators';
@@ -13,7 +13,9 @@ import setProgressPercent from './ProgressBar/setProgressPercent';
 window.onload = app;
 window.onunload = clearOutState;
 
+const DEFAULT_STATE = {time, item: Maybe.Nothing, progressBar: Maybe.Nothing, alarms: []};
 let timeout = 0;
+let state = DEFAULT_STATE;
 
 const curriedSetTimeout = curry((y, z) => timeout = setTimeout(main, y, z));
 
@@ -43,9 +45,11 @@ const checkItem = toEither(path(['item', 'isJust']), getItemValueFuture, identit
 
 var main = compose(execute, over(lensProp('item'), map(objOf('item'))), addTime, handleProgressBar, prop('value'), map(setupNewItem), checkItem);
 
-const DEFAULT_STATE = {time, item: Maybe.Nothing, progressBar: Maybe.Nothing, alarms: []};
+const getFingerNumber = compose(prop('length'), prop('touches'));
 
-let state = DEFAULT_STATE;
+const restart = compose(main, always(DEFAULT_STATE), clearOutState);
+
+const handleAccordingToFingers = cond([[equals(1), restart], [equals(2), () => console.log("2")]]);
 
 function clearOutState(){
     clearTimeout(timeout);
@@ -54,8 +58,6 @@ function clearOutState(){
 
 function app(){
     main(state);
-    fromEvent(document, "touchstart").pipe(debounceTime(500)).subscribe(() => {
-        clearOutState();
-        main(DEFAULT_STATE);
-    })
+
+    fromEvent(document, "touchstart").pipe(debounceTime(60)).subscribe(compose(handleAccordingToFingers, getFingerNumber));
 };
