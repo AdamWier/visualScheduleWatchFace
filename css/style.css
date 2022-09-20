@@ -1,5 +1,16 @@
+.ui-page .ui-content{
+	line-height: unset !important;
+}
+
 #result{
 	color: #FFF;
+	font-size: 35px;
+	text-align: center;
+	top: 50%;
+	margin: 0;
+	left: 50%;
+	position: absolute;
+	-webkit-transform: translate3d(-50%, -50%, 0);
 }
 
 .big-text{
