@@ -4,20 +4,22 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name="description" content="Digital Watch Application"/>
+    <link href="libs/tau/wearable/theme/default/tau.css" rel="stylesheet" />
+	<link href="libs/tau/wearable/theme/default/tau.circle.css" rel="stylesheet" />
     <title>Digital Watch</title>
 </head>
 
 <body>
-<div class="ui-page ui-page-active" id="pageCircleProgressBar" data-enable-page-scroll="false">
-    <div id='digital-body'>
-        <div class="ui-content content-padding">
-      		<div class="result" id="result">
-                <div id='watch'>Loading</div>
-                <div id="event">Loading</div>
-            </div> 
-   		</div>
-        
-        <progress class="ui-circle-progress" id="circleprogress" max="100" value="0"></progress>
+    <div class="ui-page ui-page-active" id="pageCircleProgressBar" data-enable-page-scroll="false">
+        <div id='digital-body'>
+            <div class="ui-content content-padding">
+                <div class="result" id="result">
+                    <div id='watch'>Loading</div>
+                    <div id="event">Loading</div>
+                </div> 
+            </div>
+            
+            <progress class="ui-circle-progress" id="circleprogress" max="100" value="0"></progress>
         </div>
     </div>
     <script src="./bundle.js"></script>
