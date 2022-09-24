@@ -1,4 +1,4 @@
-import { compose, curry, lensProp, prop, cond, equals, always, view } from 'ramda';
+import { compose, lensProp, prop, cond, equals, always, view } from 'ramda';
 import { fromEvent } from "rxjs";
 import { debounceTime } from 'rxjs/operators';
 import goToNext from './goToNext';
