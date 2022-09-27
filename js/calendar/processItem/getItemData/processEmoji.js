@@ -20,4 +20,4 @@ const removeEmoji = over(lensProp('description'), remove(emojiRegex));
 
 const getEmoji = compose(objOf('emoji'), toMaybe, view(lensIndex(0)), match(emojiRegex));
 
-export default compose(map(removeEmoji), map(converge(merge, [getEmoji, objOf('description')])), map(prop('summary')), prop('item'));
+export default compose(map(removeEmoji), map(converge(merge, [getEmoji, objOf('description')])), map(prop('summary')));
