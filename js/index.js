@@ -30,9 +30,10 @@ function clearOutState(){
 
 function app(){
     let progressBar = Nothing;
+    let currentItem = Nothing;
     updateTime(time);
     value(x => progressBar = x)(createProgressBar(progressBar));
-    // main(state);
+    console.log(value(console.log)(main(currentItem)));
 
     fromEvent(document, "touchstart").pipe(debounceTime(60)).subscribe(compose(handleAccordingToFingers, getFingerNumber));
 };

@@ -1,7 +1,7 @@
 import { fork, parallel, resolve, } from 'fluture';
 import { compose, converge, curry, over, lensProp, map, prop, identity, path, assoc, values, objOf, mergeAll } from 'ramda';
 import { tick } from './updateTime';
-import { time, toEither, toMaybe2, getEnd } from './utils';
+import { time, toEither, toMaybe2, getEnd, log } from './utils';
 import Maybe from 'sanctuary-maybe';
 import getItemFromApi from './calendar/getItemFromApi';
 import setUpAlarms from './calendar/alarms';
@@ -27,13 +27,9 @@ const handleProgressBar = converge(assoc('progressBar'), [setProgressPercent, id
 const addHtmlInsert = converge(assoc('insert'), [processItem, identity]);
 
 const addAlarms = converge(assoc('alarms'), [setUpAlarms, identity]);
-
-const addItem = over(lensProp('item'), getItemFromApi);
-
-const setupNewItem = compose(addHtmlInsert, addAlarms, addItem);
-
-const checkItem = toEither(path(['item', 'isJust']), getItemValueFuture, identity);
-
-const main = compose(execute, over(lensProp('item'), map(objOf('item'))), addTime, handleProgressBar, prop('value'), map(setupNewItem), checkItem);
+// addHtmlInsert, addAlarms, 
+const checkItem = toEither(prop('isJust'), getItemValueFuture, identity);
+// handleProgressBar
+const main = compose(prop('value'), map(getItemFromApi), checkItem);
 
 export default main; 
