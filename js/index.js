@@ -1,4 +1,4 @@
-import { compose, lensProp, prop, cond, equals, always, view } from 'ramda';
+import { compose, lensProp, prop, cond, equals, always, view, map } from 'ramda';
 import { fromEvent } from "rxjs";
 import { debounceTime } from 'rxjs/operators';
 import goToNext from './goToNext';
@@ -6,6 +6,9 @@ import DEFAULT_STATE from './DEFAULT_STATE';
 import main, {timeout} from './main';
 import { time } from './utils';
 import updateTime from './updateTime';
+import { Nothing } from 'sanctuary-maybe';
+import createProgressBar from './ProgressBar/createProgressBar';
+import { value } from 'fluture';
 
 window.onload = app;
 window.onunload = clearOutState;
@@ -26,7 +29,9 @@ function clearOutState(){
 }
 
 function app(){
+    let progressBar = Nothing;
     updateTime(time);
+    value(x => progressBar = x)(createProgressBar(progressBar));
     // main(state);
 
     fromEvent(document, "touchstart").pipe(debounceTime(60)).subscribe(compose(handleAccordingToFingers, getFingerNumber));

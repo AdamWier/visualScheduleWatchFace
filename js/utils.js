@@ -39,7 +39,8 @@ export const liftedSub = lift(subtract);
 
 export const toMaybe = cond([
 	[equals(undefined), () => Maybe.Nothing],
-	[always(true), string => Maybe.Just(string)]
+	[equals(null), () => Maybe.Nothing],
+	[always(true), x => Maybe.Just(x)]
 ]);
 
 export const convertToDateTime = curry(x => new Date(x));
