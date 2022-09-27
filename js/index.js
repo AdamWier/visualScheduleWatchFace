@@ -4,6 +4,8 @@ import { debounceTime } from 'rxjs/operators';
 import goToNext from './goToNext';
 import DEFAULT_STATE from './DEFAULT_STATE';
 import main, {timeout} from './main';
+import { time } from './utils';
+import updateTime from './updateTime';
 
 window.onload = app;
 window.onunload = clearOutState;
@@ -24,7 +26,8 @@ function clearOutState(){
 }
 
 function app(){
-    main(state);
+    updateTime(time);
+    // main(state);
 
     fromEvent(document, "touchstart").pipe(debounceTime(60)).subscribe(compose(handleAccordingToFingers, getFingerNumber));
 };

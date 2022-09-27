@@ -1,6 +1,6 @@
 import { fork, parallel, resolve, } from 'fluture';
 import { compose, converge, curry, over, lensProp, map, prop, identity, path, assoc, values, objOf, mergeAll } from 'ramda';
-import { tick } from './watchFunctions';
+import { tick } from './updateTime';
 import { time, toEither, toMaybe2, getEnd } from './utils';
 import Maybe from 'sanctuary-maybe';
 import getItemFromApi from './calendar/getItemFromApi';
@@ -10,13 +10,11 @@ import setProgressPercent from './ProgressBar/setProgressPercent';
 
 export let timeout = 0;
 
-const curriedSetTimeout = curry((y, z) => timeout = setTimeout(main, y, z));
-
 const isNotInPast = curry((testTime) => new Date().getTime() < testTime);
 
 const isExpiredItem = compose(isNotInPast, getEnd);
 
-const onSuccess = compose(curriedSetTimeout(500), over(lensProp('alarms'), compose(resolve, objOf('alarms'))), over(lensProp('progressBar'), Maybe.Just), over(lensProp('item'), toMaybe2(isExpiredItem)), assoc('time', time), mergeAll);
+const onSuccess = compose(over(lensProp('alarms'), compose(resolve, objOf('alarms'))), over(lensProp('progressBar'), Maybe.Just), over(lensProp('item'), toMaybe2(isExpiredItem)), assoc('time', time), mergeAll);
 
 const getItemValueFuture = over(lensProp('item'), compose(resolve, prop('value')));
 

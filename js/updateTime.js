@@ -1,6 +1,6 @@
 import { compose, converge, toString,  __, equals, cond, always, modulo, nth, join, curry, map, chain, invoker } from 'ramda';
-import { formatHours, formatMinutes } from './utils';
-import { attempt } from 'fluture';
+import { formatHours, formatMinutes, time } from './utils';
+import { attempt, value } from 'fluture';
 
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -33,4 +33,8 @@ const formatConsole = compose(returnConsole, isOdd, invoker(0, 'getSeconds'));
 
 const formatTime = compose(join(''), map(addSpan), converge(Array.of, [formatHours, formatConsole, formatMinutes]))
 
-export const tick = compose(map(always(undefined)), chain(insertTimeHtml), map(converge(insertInTemplate, [formatTime, formatDate])));
+export const tick = compose(chain(insertTimeHtml), map(converge(insertInTemplate, [formatTime, formatDate])));
+
+var updateTime = compose(value(() => setTimeout(updateTime, 500, time)), tick);
+
+export default updateTime;
