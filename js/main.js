@@ -21,10 +21,8 @@ const execute = compose(fork(() => {document.getElementById('event').innerText =
 
 const handleProgressBar = converge(assoc('progressBar'), [setProgressPercent, identity])
 
-const addAlarms = converge(assoc('alarms'), [setUpAlarms, identity]);
-// , addAlarms, 
 const checkItem = toEither(prop('isJust'), getItemValueFuture, identity);
 // handleProgressBar
-const main = compose(prop('value'), map(processItem), map(getItemFromApi), checkItem);
+const main = compose(prop('value'), map(setUpAlarms), map(processItem), map(getItemFromApi), checkItem);
 
 export default main; 

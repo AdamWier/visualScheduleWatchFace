@@ -1,4 +1,4 @@
-import { prop, map, curry, compose, converge, __, zipWith, filter, chain, sequence, objOf } from 'ramda';
+import { always, map, curry, compose, converge, __, zipWith, filter, chain, sequence } from 'ramda';
 import { getStart, getEnd, convertToDateTime, applyFutures } from '../utils';
 import { attempt, resolve } from 'fluture'
 
@@ -51,4 +51,4 @@ const getAlarmTimes = compose(getTimesByPercentage, converge(calculateTime, [get
 
 const createAlarms = compose(applyFutures(zipWith(addNotificationToAlarm))(notifications), sequence(resolve), map(createAlarm), filter(isFuture), map(convertToDateTime), getAlarmTimes)
 
-export default compose(map(objOf('alarms')), chain(createAlarms), prop('item'));
+export default item => compose(chain(always(item)), chain(createAlarms))(item);
