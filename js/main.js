@@ -23,6 +23,6 @@ const handleProgressBar = converge(assoc('progressBar'), [setProgressPercent, id
 
 const checkItem = toEither(prop('isJust'), getItemValueFuture, identity);
 // handleProgressBar
-const main = compose(prop('value'), map(setUpAlarms), map(processItem), map(getItemFromApi), checkItem);
+const main = compose(setProgressPercent, prop('value'), map(setUpAlarms), map(processItem), map(getItemFromApi), checkItem);
 
 export default main; 

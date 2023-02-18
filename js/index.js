@@ -1,4 +1,4 @@
-import { compose, lensProp, prop, cond, equals, always, view, map } from 'ramda';
+import { compose, lensProp, prop, cond, equals, always, view } from 'ramda';
 import { fromEvent } from "rxjs";
 import { debounceTime } from 'rxjs/operators';
 import goToNext from './goToNext';
@@ -9,6 +9,8 @@ import updateTime from './updateTime';
 import { Nothing } from 'sanctuary-maybe';
 import createProgressBar from './ProgressBar/createProgressBar';
 import { value } from 'fluture';
+import { setPercentage } from './ProgressBar/setProgressPercent';
+import calculatePercentage from './ProgressBar/calculatePercentage';
 
 window.onload = app;
 window.onunload = clearOutState;
@@ -33,7 +35,11 @@ function app(){
     let currentItem = Nothing;
     updateTime(time);
     value(x => progressBar = x)(createProgressBar(progressBar));
-    console.log(value(console.log)(main(currentItem)));
+    value(console.log)(main(currentItem));
+    // console.log(progressBar)
+    // console.log(calculatePercentage(currentItem))
+    // console.log(setPercentage(progressBar))
+    // setPercentage(progressBar)(calculatePercentage(currentItem))
 
     fromEvent(document, "touchstart").pipe(debounceTime(60)).subscribe(compose(handleAccordingToFingers, getFingerNumber));
 };
