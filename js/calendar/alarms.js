@@ -51,4 +51,4 @@ const getAlarmTimes = compose(getTimesByPercentage, converge(calculateTime, [get
 
 const createAlarms = compose(applyFutures(zipWith(addNotificationToAlarm))(notifications), sequence(resolve), map(createAlarm), filter(isFuture), map(convertToDateTime), getAlarmTimes)
 
-export default compose(map(objOf('alarms')), chain(createAlarms), prop('item'));
+export default compose(map(objOf('alarms')), chain(createAlarms));
