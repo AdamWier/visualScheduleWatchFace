@@ -1,4 +1,4 @@
-import { compose, lensProp, prop, cond, equals, always, view } from 'ramda';
+import { compose, lensProp, prop, cond, equals, always, view, map } from 'ramda';
 import { fromEvent } from "rxjs";
 import { debounceTime } from 'rxjs/operators';
 import goToNext from './goToNext';
@@ -38,8 +38,11 @@ function app(){
     const calculatePercentageFromItem = compose(calculatePercentage, getItemFromApi)()
     const buildBar = resolve(new tau.widget.CircleProgressBar(document.getElementById('circleprogress'), {size: 'full', thickness: 30}))
     const barFuture = (pap(buildBar)(pap(calculatePercentageFromItem)(resolve(setPercentage))))
-    const timeFuture = (compose(tick, always(time))())
-    fork(console.log)(console.log)(parallel(4)([alarmFuture, insertFuture, barFuture, timeFuture, getItemFromApi()]))
+    const timeFuture = (compose(map(log('tick')), tick, always(time))())
+    
+    const loop = () => setTimeout(() => fork(loop)(loop)(timeFuture), 500)
+    fork(loop)(loop)(timeFuture)
+    // fork(console.log)(console.log)(parallel(4)([alarmFuture, insertFuture, barFuture, timeFuture, getItemFromApi()]))
 
     // fromEvent(document, "touchstart").pipe(debounceTime(60)).subscribe(compose(handleAccordingToFingers, getFingerNumber));
 };
