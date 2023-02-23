@@ -6,8 +6,8 @@ import {
 	map,
 	always,
  } from 'ramda';
-import { fetchJson } from '../utils';
-import { ADDRESS } from '../env';
+import { fetchJson } from '../../utils';
+import { ADDRESS } from '../../env';
 import { cache } from 'fluture';
 
 const getFirstNotFullDayItem = find(propSatisfies(item => !!item.dateTime, 'end'));

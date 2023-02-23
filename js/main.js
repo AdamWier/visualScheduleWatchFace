@@ -3,7 +3,6 @@ import { compose, converge, curry, over, lensProp, map, prop, identity, path, as
 import { tick } from './watchFunctions';
 import { time, toEither, toMaybe2, getEnd } from './utils';
 import Maybe from 'sanctuary-maybe';
-import getItemFromApi from './calendar/getItemFromApi';
 import setUpAlarms from './calendar/alarms';
 import processItem from './calendar/processItem';
 import setProgressPercent from './ProgressBar/setProgressPercent';
@@ -30,12 +29,12 @@ const addHtmlInsert = converge(assoc('insert'), [processItem, identity]);
 
 const addAlarms = converge(assoc('alarms'), [setUpAlarms, identity]);
 
-const addItem = over(lensProp('item'), getItemFromApi);
+// const addItem = over(lensProp('item'), getItemFromApi);
 
-const setupNewItem = compose(addHtmlInsert, addAlarms, addItem);
+// const setupNewItem = compose(addHtmlInsert, addAlarms, addItem);
 
 const checkItem = toEither(path(['item', 'isJust']), getItemValueFuture, identity);
 
-const main = compose(execute, over(lensProp('item'), map(objOf('item'))), addTime, handleProgressBar, prop('value'), map(setupNewItem), checkItem);
+// const main = compose(execute, over(lensProp('item'), map(objOf('item'))), addTime, handleProgressBar, prop('value'), map(setupNewItem), checkItem);
 
-export default main; 
+// export default main; 

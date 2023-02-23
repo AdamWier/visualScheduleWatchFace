@@ -19,4 +19,4 @@ const insertInTemplate = curry(inserts => `
 
 const insertEventInfo = compose(insertEventHtml, insertInTemplate);
 
-export default compose(map(always(undefined)), chain(insertEventInfo), getInsertElements);
+export default compose(chain(insertEventInfo), getInsertElements);

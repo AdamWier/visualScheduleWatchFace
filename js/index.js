@@ -1,17 +1,17 @@
-import { compose, lensProp, prop, cond, equals, always, view, map } from 'ramda';
+import { compose, lensProp, prop, cond, equals, always, view, map, } from 'ramda';
 import { fromEvent } from "rxjs";
 import { debounceTime } from 'rxjs/operators';
-import goToNext from './goToNext';
+// import goToNext from './goToNext';
 import DEFAULT_STATE from './DEFAULT_STATE';
-import main, {timeout} from './main';
-import getItemFromApi from './calendar/getItemFromApi';
+import {timeout} from './main';
 import setUpAlarms from './calendar/alarms';
 import { attempt, fork, forkCatch, pap, parallel, resolve } from 'fluture';
 import processItem from './calendar/processItem';
 import calculatePercentage from './ProgressBar/calculatePercentage';
 import { time, log } from './utils';
 import { tick } from './watchFunctions';
-import setProgressPercent, { setPercentage } from './ProgressBar/setProgressPercent';
+import setProgressPercent from './ProgressBar/setProgressPercent';
+import getItem from './calendar/getItem';
 
 window.onload = app;
 window.onunload = clearOutState;
@@ -20,11 +20,11 @@ let state = DEFAULT_STATE;
 
 const getFingerNumber = compose(prop('length'), prop('touches'));
 
-const restart = compose(main, always(DEFAULT_STATE), clearOutState);
+// const restart = compose(main, always(DEFAULT_STATE), clearOutState);
 
-const moveOn = compose(goToNext, view(lensProp('item')), always(state))
+// const moveOn = compose(goToNext, view(lensProp('item')), always(state))
 
-const handleAccordingToFingers = cond([[equals(1), restart], [equals(2), moveOn]]);
+// const handleAccordingToFingers = cond([[equals(1), restart], [equals(2), moveOn]]);
 
 function clearOutState(){
     clearTimeout(timeout);
@@ -33,16 +33,16 @@ function clearOutState(){
 
 function app(){
     // main(state);
-    const alarmFuture = (compose(setUpAlarms, getItemFromApi)())
-    const insertFuture = (compose(processItem, getItemFromApi)())
-    const calculatePercentageFromItem = compose(calculatePercentage, getItemFromApi)()
-    const buildBar = resolve(new tau.widget.CircleProgressBar(document.getElementById('circleprogress'), {size: 'full', thickness: 30}))
-    const barFuture = (pap(buildBar)(pap(calculatePercentageFromItem)(resolve(setPercentage))))
-    const timeFuture = (compose(map(log('tick')), tick, always(time))())
+    const bar = new tau.widget.CircleProgressBar(document.getElementById('circleprogress'), {size: 'full', thickness: 30});
+    const calculatePercentageFromItem = (compose(map(setProgressPercent(bar)), calculatePercentage, getItem)())
+    const timeFuture = (compose(tick, always(time))());
+    const loopFutures = parallel(2)([timeFuture, calculatePercentageFromItem]);
+    const loop = () => setTimeout(() => fork(loop)(loop)(loopFutures), 500);
+    fork(loop)(loop)(loopFutures);
     
-    const loop = () => setTimeout(() => fork(loop)(loop)(timeFuture), 500)
-    fork(loop)(loop)(timeFuture)
-    // fork(console.log)(console.log)(parallel(4)([alarmFuture, insertFuture, barFuture, timeFuture, getItemFromApi()]))
+    const alarmFuture = (compose(setUpAlarms, getItem)());
+    const insertFuture = (compose(processItem, getItem)());
+    fork(console.log)(console.log)(parallel(2)([insertFuture, alarmFuture]))
 
     // fromEvent(document, "touchstart").pipe(debounceTime(60)).subscribe(compose(handleAccordingToFingers, getFingerNumber));
 };
