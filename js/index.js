@@ -1,4 +1,4 @@
-import { compose, lensProp, prop, cond, equals, always, view, map, } from 'ramda';
+import { compose, lensProp, prop, cond, equals, always, view, map, ifElse, gte, is, find, chain, lte, } from 'ramda';
 import { fromEvent } from "rxjs";
 import { debounceTime } from 'rxjs/operators';
 // import goToNext from './goToNext';
@@ -35,16 +35,16 @@ function clearOutState(){
 function app(){
     // main(state);
     const bar = new tau.widget.CircleProgressBar(document.getElementById('circleprogress'), {size: 'full', thickness: 30});
-    const calculatePercentageFromItem = (compose(map(setProgressPercent(bar)), calculatePercentage, getItemFromSessionStorage)('item'))
+    const alarmFuture = (compose(setUpAlarms, getItem)());
+    const insertFuture = (compose(processItem, getItem)());
+    const parallelNewFutures = (parallel(2)([insertFuture, alarmFuture]))
+    const getNewIfEventDone = ifElse(gte(100), resolve, always(parallelNewFutures))
+    const calculatePercentageFromItem = (compose(map(log('map hey')), log('hey'), chain(getNewIfEventDone), map(log('logged map here')), log('here'), map(setProgressPercent(bar)), calculatePercentage, getItemFromSessionStorage)('item'))
     const timeFuture = (compose(tick, always(time))());
     const loopFutures = parallel(2)([timeFuture, calculatePercentageFromItem]);
     const loop = () => setTimeout(() => loopFork(loopFutures), 500);
     const loopFork = fork(loop)(loop)
     loopFork(loopFutures);
-    
-    const alarmFuture = (compose(setUpAlarms, getItem)());
-    const insertFuture = (compose(processItem, getItem)());
-    const parallelNewFutures = (parallel(2)([insertFuture, alarmFuture]))
     const newItemFork = fork(console.log)(console.log);
     newItemFork(parallelNewFutures);
 
