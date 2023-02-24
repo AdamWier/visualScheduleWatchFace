@@ -28,7 +28,8 @@ const getFingerNumber = compose(prop('length'), prop('touches'));
 // const handleAccordingToFingers = cond([[equals(1), restart], [equals(2), moveOn]]);
 
 function clearOutState(){
-    clearTimeout(timeout);
+    // untested
+    clearTimeout(sessionStorage.getItem('timerId'));
     tizen.alarm.removeAll();
 }
 
