@@ -1,11 +1,11 @@
-import { compose, lensProp, prop, cond, equals, always, view, map, ifElse, gte, is, find, chain, lte, } from 'ramda';
+import { compose, lensProp, prop, cond, equals, always, view, map, ifElse, gte, is, find, chain, lte, converge, } from 'ramda';
 import { fromEvent } from "rxjs";
 import { debounceTime } from 'rxjs/operators';
 // import goToNext from './goToNext';
 import DEFAULT_STATE from './DEFAULT_STATE';
 import {timeout} from './main';
 import setUpAlarms from './calendar/alarms';
-import { attempt, fork, forkCatch, pap, parallel, resolve } from 'fluture';
+import { attempt, fork, forkCatch, go, pap, parallel, resolve } from 'fluture';
 import processItem from './calendar/processItem';
 import calculatePercentage from './ProgressBar/calculatePercentage';
 import { time, log } from './utils';
@@ -37,16 +37,22 @@ function app(){
     const bar = new tau.widget.CircleProgressBar(document.getElementById('circleprogress'), {size: 'full', thickness: 30});
     const alarmFuture = (compose(setUpAlarms, getItem)());
     const insertFuture = (compose(processItem, getItem)());
+    const testy2 = go(function*(){
+        const item = yield getItem();
+        return [yield processItem(item), yield setUpAlarms(item)]
+    })
+    const testy = compose(parallel(2), converge(Array.of, [setUpAlarms, processItem]), getItem)();
+    console.log(testy2)
     const parallelNewFutures = (parallel(2)([insertFuture, alarmFuture]))
-    const getNewIfEventDone = ifElse(gte(100), resolve, always(parallelNewFutures))
-    const calculatePercentageFromItem = (compose(map(log('map hey')), log('hey'), chain(getNewIfEventDone), map(log('logged map here')), log('here'), map(setProgressPercent(bar)), calculatePercentage, getItemFromSessionStorage)('item'))
-    const timeFuture = (compose(tick, always(time))());
-    const loopFutures = parallel(2)([timeFuture, calculatePercentageFromItem]);
-    const loop = () => setTimeout(() => loopFork(loopFutures), 500);
-    const loopFork = fork(loop)(loop)
-    loopFork(loopFutures);
+    // const getNewIfEventDone = ifElse(gte(100), resolve, always(testy))
+    // const calculatePercentageFromItem = (compose(chain(getNewIfEventDone), map(setProgressPercent(bar)), calculatePercentage, getItemFromSessionStorage)('item'))
+    // const timeFuture = (compose(tick, always(time))());
+    // const loopFutures = parallel(2)([timeFuture, calculatePercentageFromItem]);
+    // const loop = () => setTimeout(() => loopFork(loopFutures), 500);
+    // const loopFork = fork(loop)(loop)
+    // loopFork(loopFutures);
     const newItemFork = fork(console.log)(console.log);
-    newItemFork(parallelNewFutures);
+    newItemFork(testy2);
 
     // fromEvent(document, "touchstart").pipe(debounceTime(60)).subscribe(compose(handleAccordingToFingers, getFingerNumber));
 };
