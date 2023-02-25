@@ -50,6 +50,6 @@ function app(){
     const newItemFork = fork(console.log)(console.log);
     newItemFork(getItemCoroutine);
 
-    fromEvent(document, "touchstart").pipe(debounceTime(60)).subscribe(() => newItemFork(getItemCoroutine));
+    fromEvent(document, "touchstart").pipe(debounceTime(60)).subscribe(() => {tizen.alarm.removeAll(); newItemFork(getItemCoroutine)});
     // fromEvent(document, "touchstart").pipe(debounceTime(60)).subscribe(compose(handleAccordingToFingers, getFingerNumber));
 };
