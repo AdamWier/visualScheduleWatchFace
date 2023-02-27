@@ -5,7 +5,7 @@ import { debounceTime } from 'rxjs/operators';
 import DEFAULT_STATE from './DEFAULT_STATE';
 import {timeout} from './main';
 import setUpAlarms from './calendar/alarms';
-import { attempt, fork, forkCatch, go, lastly, pap, parallel, resolve } from 'fluture';
+import { attempt, fork, forkCatch, go, lastly, pap, parallel, resolve, and } from 'fluture';
 import processItem from './calendar/processItem';
 import calculatePercentage from './ProgressBar/calculatePercentage';
 import { time, log } from './utils';
@@ -25,7 +25,7 @@ const getFingerNumber = compose(prop('length'), prop('touches'));
 
 // const moveOn = compose(goToNext, view(lensProp('item')), always(state))
 
-// const handleAccordingToFingers = cond([[equals(1), restart], [equals(2), moveOn]]);
+const removeAllAlarms = attempt(tizen.alarm.removeAll);
 
 function clearOutState(){
     // untested
@@ -50,6 +50,6 @@ function app(){
     const newItemFork = fork(console.log)(console.log);
     newItemFork(getItemCoroutine);
 
-    fromEvent(document, "touchstart").pipe(debounceTime(60)).subscribe(() => {tizen.alarm.removeAll(); newItemFork(getItemCoroutine)});
+    fromEvent(document, "touchstart").pipe(debounceTime(60)).subscribe(() => (newItemFork(and(removeAllAlarms)(getItemCoroutine))));
     // fromEvent(document, "touchstart").pipe(debounceTime(60)).subscribe(compose(handleAccordingToFingers, getFingerNumber));
 };
