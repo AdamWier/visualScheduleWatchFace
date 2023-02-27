@@ -27,6 +27,10 @@ const getFingerNumber = compose(prop('length'), prop('touches'));
 
 const removeAllAlarms = attempt(tizen.alarm.removeAll);
 
+const showLoader = attempt(() => document.getElementById('loading').style.display = 'block');
+
+const hideLoader = attempt(() => document.getElementById('loading').style.display = 'none');
+
 function clearOutState(){
     // untested
     clearTimeout(sessionStorage.getItem('timerId'));
@@ -37,8 +41,11 @@ function app(){
     // main(state);
     const bar = new tau.widget.CircleProgressBar(document.getElementById('circleprogress'), {size: 'full', thickness: 30});
     const getItemCoroutine = go(function*(){
+        yield showLoader;
         const item = yield getItem();
-        return [yield processItem(resolve(item)), yield setUpAlarms(resolve(item))]
+        const result = [yield processItem(resolve(item)), yield setUpAlarms(resolve(item))]
+        yield hideLoader;
+        return result;
     })
     const getNewIfEventDone = ifElse(gte(99), resolve, always(getItemCoroutine))
     const calculatePercentageFromItem = (compose(chain(getNewIfEventDone), map(setProgressPercent(bar)), calculatePercentage, getItemFromSessionStorage)('item'))

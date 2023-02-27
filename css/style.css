@@ -31,3 +31,8 @@
 	width: 1ch;
 	text-align: center;
 }
+
+.ui-processing-full-size {
+	display: none;
+ }
+ 
