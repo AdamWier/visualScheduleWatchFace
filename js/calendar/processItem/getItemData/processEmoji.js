@@ -10,7 +10,6 @@ import {
 	lensIndex,
 	view,
 	__,
-	map,
  } from 'ramda';
 import { toMaybe, remove } from '../../../utils';
 
@@ -20,4 +19,4 @@ const removeEmoji = over(lensProp('description'), remove(emojiRegex));
 
 const getEmoji = compose(objOf('emoji'), toMaybe, view(lensIndex(0)), match(emojiRegex));
 
-export default compose(map(removeEmoji), map(converge(merge, [getEmoji, objOf('description')])), map(prop('summary')));
+export default compose(removeEmoji, converge(merge, [getEmoji, objOf('description')]), prop('summary'));

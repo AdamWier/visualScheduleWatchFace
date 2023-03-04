@@ -1,4 +1,4 @@
-import { compose, lensProp, prop, cond, equals, always, view, map, ifElse, gte, is, find, chain, lte, converge, } from 'ramda';
+import { compose, lensProp, prop, cond, equals, always, view, map, ifElse, gte, is, find, chain, lte, converge, ap, identity, } from 'ramda';
 import { fromEvent } from "rxjs";
 import { debounceTime } from 'rxjs/operators';
 // import goToNext from './goToNext';
@@ -40,14 +40,14 @@ function clearOutState(){
 function app(){
     // main(state);
     const bar = new tau.widget.CircleProgressBar(document.getElementById('circleprogress'), {size: 'full', thickness: 30});
-    const getItemCoroutine = go(function*(){
-        yield showLoader;
-        const item = yield getItem();
-        const result = [yield processItem(resolve(item)), yield setUpAlarms(resolve(item))]
-        yield hideLoader;
-        return result;
-    })
-    const getNewIfEventDone = ifElse(gte(99), resolve, always(getItemCoroutine))
+
+    
+    const doItemStuff = converge(map(identity), [processItem, setUpAlarms]);
+    const itemstufffuture = compose(chain(doItemStuff), getItem)();
+    const showLoaderAndGetItem = and(itemstufffuture)(showLoader);
+    const hideLoaderAfterGettingItem = lastly(hideLoader)(showLoaderAndGetItem);
+    const getNewIfEventDone = ifElse(gte(99), resolve, always(hideLoaderAfterGettingItem));
+
     const calculatePercentageFromItem = (compose(chain(getNewIfEventDone), map(setProgressPercent(bar)), calculatePercentage, getItemFromSessionStorage)('item'))
     const timeFuture = (compose(tick, always(time))());
     const loopFutures = parallel(2)([timeFuture, calculatePercentageFromItem]);
@@ -55,8 +55,9 @@ function app(){
     const loopFork = fork(loop)(loop)
     loopFork(loopFutures);
     const newItemFork = fork(console.log)(console.log);
-    newItemFork(getItemCoroutine);
+    
+    newItemFork(hideLoaderAfterGettingItem);
 
-    fromEvent(document, "touchstart").pipe(debounceTime(60)).subscribe(() => (newItemFork(and(removeAllAlarms)(getItemCoroutine))));
+    fromEvent(document, "touchstart").pipe(debounceTime(60)).subscribe(() => (newItemFork(hideLoaderAfterGettingItem)));
     // fromEvent(document, "touchstart").pipe(debounceTime(60)).subscribe(compose(handleAccordingToFingers, getFingerNumber));
 };

@@ -14,4 +14,4 @@ const createMinuteProperty = compose(formatMinutes, convertToDateTime, prop('dat
 
 const createHourProperty = compose(formatHours, convertToDateTime, prop('dateTime'), prop('end'));
 
-export default compose(map(objOf('end')), map(join('')), map(converge(Array.of, [createHourProperty, always(':'), createMinuteProperty])));
+export default compose(objOf('end'), join(''), converge(Array.of, [createHourProperty, always(':'), createMinuteProperty]));
