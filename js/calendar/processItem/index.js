@@ -2,9 +2,6 @@ import {
 	compose, 
 	curry, 
 	__,
-	chain,
-	map,
-	always,
  } from 'ramda';
 import { attempt } from 'fluture';
 import getInsertElements from './getItemData/getInsertElements';

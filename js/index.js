@@ -2,8 +2,6 @@ import { compose, lensProp, prop, cond, equals, always, view, map, ifElse, gte, 
 import { fromEvent } from "rxjs";
 import { debounceTime } from 'rxjs/operators';
 // import goToNext from './goToNext';
-import DEFAULT_STATE from './DEFAULT_STATE';
-import {timeout} from './main';
 import setUpAlarms from './calendar/alarms';
 import { attempt, fork, forkCatch, go, lastly, pap, parallel, resolve, and } from 'fluture';
 import processItem from './calendar/processItem';
@@ -16,8 +14,6 @@ import getItemFromSessionStorage from './calendar/getItem/getItemFromSessionStor
 
 window.onload = app;
 window.onunload = clearOutState;
-
-let state = DEFAULT_STATE;
 
 const getFingerNumber = compose(prop('length'), prop('touches'));
 

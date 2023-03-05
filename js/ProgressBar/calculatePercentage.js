@@ -1,6 +1,5 @@
 import { 
 	compose, 
-	prop, 
 	converge, 
 	subtract, 
 	multiply, 

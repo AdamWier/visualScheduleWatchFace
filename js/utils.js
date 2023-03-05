@@ -3,8 +3,6 @@ import Either from 'sanctuary-either';
 import { attempt, encaseP, ap, resolve } from 'fluture';
 import Maybe from 'sanctuary-maybe';
 
-export const toMaybe2 = curry((condition, x) => condition(x) ? Maybe.Just(x) : Maybe.isNothing);
-
 export const applyFutures = curry((functionToApply, secondArgument, firstArgument) => (ap (secondArgument) (ap (firstArgument) (resolve(functionToApply)))));
 
 const isLessThanTen = curry((minutes) => minutes < 10 ? Either.Right(toString(minutes)) : Either.Left(toString(minutes)));
@@ -20,8 +18,6 @@ const convertTizToJs = curry(x => attempt(() => new Date(x.getFullYear(), x.getM
 export const time = chain(convertTizToJs)(getTizTime);
 
 export const log = curry((x, y) => {console.log(x, y); return y});
-
-export const toEither = curry((condition, Left, Right, x) => condition(x) ? Either.Left(Left(x)) : Either.Right(Right(x)));
 
 const curriedEncaseP = curry(encaseP);
 
