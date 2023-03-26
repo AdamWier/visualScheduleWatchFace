@@ -9,7 +9,7 @@ import calculatePercentage from './ProgressBar/calculatePercentage';
 import { time, log } from './utils';
 import { tick } from './watchFunctions';
 import setProgressPercent from './ProgressBar/setProgressPercent';
-import getItem from './calendar/getItem';
+import getItems from './calendar/getItem';
 import getItemFromSessionStorage from './calendar/getItem/getItemFromSessionStorage';
 import useLoader from './useLoader';
 import { SESSION_STORAGE_KEY } from './constants';
@@ -27,7 +27,7 @@ function app(){
     const bar = new tau.widget.CircleProgressBar(document.getElementById('circleprogress'), {size: 'full', thickness: 30});
 
     const doItemStuff = converge(map(identity), [processItem, setUpAlarms]);
-    const itemstufffuture = compose(chain(doItemStuff), getItem)();
+    const itemstufffuture = compose(chain(doItemStuff), getItems)();
     const loadItem = compose(useLoader, always(itemstufffuture))();
     const getNewIfEventDone = ifElse(gte(99), resolve, always(loadItem));
 

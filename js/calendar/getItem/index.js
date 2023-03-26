@@ -1,7 +1,7 @@
 import { always, chain, compose, map } from "ramda";
 import { SESSION_STORAGE_KEY } from "../../constants";
-import getItemFromApi from "./getItemFromApi";
+import getItemsFromApi from "./getItemsFromApi";
 import getItemFromSessionStorage from "./getItemFromSessionStorage";
-import storeItemInSessionStorage from "./storeItemInSessionStorage";
+import storeItemInSessionStorage from "./storeItemsInSessionStorage";
 
-export default compose(chain(getItemFromSessionStorage), map(always(SESSION_STORAGE_KEY)), chain(storeItemInSessionStorage), getItemFromApi)
+export default compose(chain(getItemFromSessionStorage), map(always(SESSION_STORAGE_KEY)), chain(storeItemInSessionStorage), getItemsFromApi)
