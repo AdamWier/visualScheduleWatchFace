@@ -1,8 +1,9 @@
 import { attempt } from "fluture";
-import { curry, compose, chain } from "ramda";
+import { curry, compose, chain, propSatisfies, map, find, prop } from "ramda";
+import { log, toMaybe } from "../../utils";
 
-const jsonSerializeFuture = curry(x => attempt(() => JSON.parse(x)));
+const getFirstNotFullDayItem = find(propSatisfies(item => !!item.dateTime, 'end'));
 
 const getFromSessionStorage = curry(x => attempt(() => sessionStorage.getItem(x)));
 
-export default compose(chain(jsonSerializeFuture), getFromSessionStorage);
+export default compose(map(prop('value')), map(map(getFirstNotFullDayItem)), map(map(JSON.parse)), map(toMaybe), getFromSessionStorage);

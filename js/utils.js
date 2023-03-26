@@ -1,4 +1,4 @@
-import { compose, toString, concat, map, prop, curry, invoker, chain, replace, lift, equals, always, cond, divide, subtract, __ } from 'ramda';
+import { compose, toString, concat, map, prop, curry, invoker, chain, replace, lift, always, cond, divide, subtract, __, isNil } from 'ramda';
 import Either from 'sanctuary-either';
 import { attempt, encaseP, ap, resolve } from 'fluture';
 import Maybe from 'sanctuary-maybe';
@@ -34,8 +34,8 @@ export const liftedDivide = lift(divide);
 export const liftedSub = lift(subtract);
 
 export const toMaybe = cond([
-	[equals(undefined), () => Maybe.Nothing],
-	[always(true), string => Maybe.Just(string)]
+	[isNil, always(Maybe.Nothing)],
+	[always(true), x => Maybe.Just(x)]
 ]);
 
 export const convertToDateTime = curry(x => new Date(x));
