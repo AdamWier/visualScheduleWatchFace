@@ -12,6 +12,7 @@ import setProgressPercent from './ProgressBar/setProgressPercent';
 import getItem from './calendar/getItem';
 import getItemFromSessionStorage from './calendar/getItem/getItemFromSessionStorage';
 import useLoader from './useLoader';
+import { SESSION_STORAGE_KEY } from './constants';
 
 window.onload = app;
 window.onunload = clearOutState;
@@ -30,7 +31,7 @@ function app(){
     const loadItem = compose(useLoader, always(itemstufffuture))();
     const getNewIfEventDone = ifElse(gte(99), resolve, always(loadItem));
 
-    const calculatePercentageFromItem = (compose(chain(getNewIfEventDone), map(setProgressPercent(bar)), calculatePercentage, getItemFromSessionStorage)('item'))
+    const calculatePercentageFromItem = (compose(chain(getNewIfEventDone), map(setProgressPercent(bar)), calculatePercentage, getItemFromSessionStorage)(SESSION_STORAGE_KEY))
     const timeFuture = (compose(tick, always(time))());
     const loopFutures = parallel(2)([timeFuture, calculatePercentageFromItem]);
     const loop = () => setTimeout(() => loopFork(loopFutures), 500);
