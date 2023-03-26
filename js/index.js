@@ -16,14 +16,6 @@ import useLoader from './useLoader';
 window.onload = app;
 window.onunload = clearOutState;
 
-const getFingerNumber = compose(prop('length'), prop('touches'));
-
-// const restart = compose(main, always(DEFAULT_STATE), clearOutState);
-
-// const moveOn = compose(goToNext, view(lensProp('item')), always(state))
-
-const removeAllAlarms = attempt(tizen.alarm.removeAll);
-
 function clearOutState(){
     // untested
     clearTimeout(sessionStorage.getItem('timerId'));
@@ -31,7 +23,6 @@ function clearOutState(){
 }
 
 function app(){
-    // main(state);
     const bar = new tau.widget.CircleProgressBar(document.getElementById('circleprogress'), {size: 'full', thickness: 30});
 
     const doItemStuff = converge(map(identity), [processItem, setUpAlarms]);
@@ -50,5 +41,4 @@ function app(){
     newItemFork(loadItem);
 
     fromEvent(document, "touchstart").pipe(debounceTime(60)).subscribe(() => (newItemFork(loadItem)));
-    // fromEvent(document, "touchstart").pipe(debounceTime(60)).subscribe(compose(handleAccordingToFingers, getFingerNumber));
 };
