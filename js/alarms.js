@@ -1,5 +1,5 @@
 import { map, curry, compose, converge, __, zipWith, filter, chain, sequence, objOf } from 'ramda';
-import { getStart, getEnd, convertToDateTime, applyFutures } from '../utils';
+import { getStart, getEnd, convertToDateTime, applyFutures } from './utils';
 import { attempt, resolve } from 'fluture'
 
 const addNotificationToAlarm = curry((alarm, notification) => {tizen.alarm.addAlarmNotification(alarm, notification); return alarm})

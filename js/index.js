@@ -2,7 +2,7 @@ import { compose, lensProp, prop, cond, equals, always, view, map, ifElse, gte, 
 import { fromEvent } from "rxjs";
 import { debounceTime } from 'rxjs/operators';
 // import goToNext from './goToNext';
-import setUpAlarms from './calendar/alarms';
+import setUpAlarms from './alarms';
 import { attempt, fork, forkCatch, go, lastly, pap, parallel, resolve, and } from 'fluture';
 import processItem from './calendar/processItem';
 import calculatePercentage from './ProgressBar/calculatePercentage';

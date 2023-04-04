@@ -6,5 +6,6 @@ import {
  } from 'ramda';
 import processEmoji from './processEmoji';
 import getEndString from './getEndString';
+import getCache from './getCache';
 
-export default compose(mergeAll, converge(Array.of, [getEndString, processEmoji]));
+export default compose(mergeAll, converge(Array.of, [getCache, getEndString, processEmoji]));
