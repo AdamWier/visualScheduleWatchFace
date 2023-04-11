@@ -1,4 +1,4 @@
-import { map, curry, compose, converge, __, zipWith, filter, sequence } from 'ramda';
+import { map, curry, compose, converge, __, zipWith, filter, traverse } from 'ramda';
 import { getStart, getEnd, convertToDateTime, applyFutures } from './utils';
 import { encase, resolve } from 'fluture'
 
@@ -49,4 +49,4 @@ const calculateTime = curry((end, start, percent) => (percent * (end - start)) +
 
 const getAlarmTimes = compose(getTimesByPercentage, converge(calculateTime, [getEnd, getStart]));
 
-export default compose(applyFutures(zipWith(addNotificationToAlarm))(notifications), sequence(resolve), map(createAlarm), filter(isFuture), map(convertToDateTime), getAlarmTimes)
+export default compose(applyFutures(zipWith(addNotificationToAlarm))(notifications), traverse(resolve, createAlarm), filter(isFuture), map(convertToDateTime), getAlarmTimes)
