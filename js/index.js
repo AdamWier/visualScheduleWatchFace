@@ -1,4 +1,4 @@
-import { compose, lensProp, prop, cond, equals, always, view, map, ifElse, gte, is, find, chain, lte, converge, ap, identity, } from 'ramda';
+import { compose, lensProp, prop, cond, equals, always, view, map, ifElse, gte, is, find, chain, lte, converge, ap, identity, sequence } from 'ramda';
 import { fromEvent } from "rxjs";
 import { debounceTime } from 'rxjs/operators';
 // import goToNext from './goToNext';
@@ -27,7 +27,7 @@ function app(){
     sessionStorage.setItem(SESSION_STORAGE_KEY, '[]');
     const bar = new tau.widget.CircleProgressBar(document.getElementById('circleprogress'), {size: 'full', thickness: 30});
 
-    const doItemStuff = converge(map(identity), [processItem, setUpAlarms]);
+    const doItemStuff = compose(sequence(resolve), converge(Array.of, [processItem, setUpAlarms]));
     const itemstufffuture = compose(chain(doItemStuff), getItems)();
     const loadItem = compose(useLoader, always(itemstufffuture))();
     const getNewIfEventDone = ifElse(gte(99), resolve, always(loadItem));

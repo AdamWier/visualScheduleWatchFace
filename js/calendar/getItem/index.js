@@ -3,7 +3,7 @@ import { SESSION_STORAGE_KEY } from "../../constants";
 import getItemsFromApi from "./getItemsFromApi";
 import getItemFromSessionStorage from "./getItemFromSessionStorage";
 import storeItemInSessionStorage from "./storeItemsInSessionStorage";
-import { after, fork, race, resolve } from "fluture";
+import { after, race, resolve } from "fluture";
 import { log } from "../../utils";
 
 const assocCacheValue = assoc('isCache');

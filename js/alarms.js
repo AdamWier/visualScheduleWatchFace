@@ -1,6 +1,6 @@
-import { map, curry, compose, converge, __, zipWith, filter, chain, sequence, objOf } from 'ramda';
+import { map, curry, compose, converge, __, zipWith, filter, sequence } from 'ramda';
 import { getStart, getEnd, convertToDateTime, applyFutures } from './utils';
-import { attempt, resolve } from 'fluture'
+import { encase, resolve } from 'fluture'
 
 const addNotificationToAlarm = curry((alarm, notification) => {tizen.alarm.addAlarmNotification(alarm, notification); return alarm})
 
@@ -39,7 +39,7 @@ const notifications = resolve([
 	),
 ]);
 
-const createAlarm = curry(x => attempt(() => new tizen.AlarmAbsolute(x)));
+const createAlarm = encase(x => new tizen.AlarmAbsolute(x));
 
 const isFuture = x => x > new Date();
 
@@ -49,6 +49,4 @@ const calculateTime = curry((end, start, percent) => (percent * (end - start)) +
 
 const getAlarmTimes = compose(getTimesByPercentage, converge(calculateTime, [getEnd, getStart]));
 
-const createAlarms = compose(applyFutures(zipWith(addNotificationToAlarm))(notifications), sequence(resolve), map(createAlarm), filter(isFuture), map(convertToDateTime), getAlarmTimes)
-
-export default compose(map(objOf('alarms')), chain(createAlarms));
+export default compose(applyFutures(zipWith(addNotificationToAlarm))(notifications), sequence(resolve), map(createAlarm), filter(isFuture), map(convertToDateTime), getAlarmTimes)
