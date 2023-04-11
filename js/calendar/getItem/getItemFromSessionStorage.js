@@ -1,20 +1,18 @@
-import { attempt } from "fluture";
-import { curry, compose, map, find, prop, where, has, filter, gte, lt, invoker, } from "ramda";
-import { convertToDateTime, log, toMaybe } from "../../utils";
+import { encase } from "fluture";
+import { curry, compose, map, find, prop, where, has, filter, lt, invoker, chain, propSatisfies, } from "ramda";
+import { convertToDateTime } from "../../utils";
 
 const callGetTime = invoker(0, 'getTime');
 
-const isBeforeNow = compose(lt(new Date().getTime()), callGetTime, convertToDateTime, prop('dateTime'));
+const isBefore = curry((y, x) => compose(lt(y), callGetTime, convertToDateTime, prop('dateTime'))(x));
 
-const getCurrentItem = find(where({
-    end: isBeforeNow,
-}));
+const getCurrentItem = encase((x) => find(propSatisfies(isBefore(new Date().getTime()), 'end'))(x));
 
 const getFirstNotFullDayItem = filter(where({
     start: has('dateTime'),
     end: has('dateTime')
 }));
 
-const getFromSessionStorage = curry(x => attempt(() => sessionStorage.getItem(x)));
+const getFromSessionStorage = encase(sessionStorage.getItem.bind(sessionStorage));
 
-export default compose(map(prop('value')), map(map(getCurrentItem)), map(map(getFirstNotFullDayItem)), map(map(JSON.parse)), map(toMaybe), getFromSessionStorage);
+export default compose(chain(getCurrentItem), map(getFirstNotFullDayItem), map(JSON.parse), getFromSessionStorage);

@@ -24,6 +24,7 @@ function clearOutState(){
 }
 
 function app(){
+    sessionStorage.setItem(SESSION_STORAGE_KEY, '[]');
     const bar = new tau.widget.CircleProgressBar(document.getElementById('circleprogress'), {size: 'full', thickness: 30});
 
     const doItemStuff = converge(map(identity), [processItem, setUpAlarms]);
